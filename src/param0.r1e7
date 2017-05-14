@@ -1,0 +1,15 @@
+1.7d0                     ptan 1.7
+1.9d0                     qtan 1.5
+300.d0                    Reynolds
+1.d0                  DD
+6.28318530717958      Lx
+6.28318530717958      Lz
+5d-7                  dt
+50000          ndt
+500          saveevery
+1.d7        Rayleigh
+0.71d0         Prandtl
+1.d0         Kscalar
+1.025e13     Rt
+1.e13        Rs
+3.d0         Le

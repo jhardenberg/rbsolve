@@ -1,0 +1,67 @@
+#!/bin/bash
+#@ wall_clock_limit = 47:59:00
+#@ island_count = 1
+#@ energy_policy_tag = rb256
+#@ minimize_time_to_solution = yes
+#@ notification = never
+#@ job_name = rbfs1e7_3000
+#@ job_type = parallel
+#@ class = micro
+#@ network.MPI = sn_all,not_shared,us
+#@ tasks_per_node = 16
+#@ node = 2
+#@ initialdir = $(home)/rbcode/log
+#@ output = rbfs1e7_rot4a_$(jobid).out
+#@ error = rbfs1e7_rot4a_$(jobid).err
+#@ queue
+###############################################################################
+#                              RUN EC_EARTH
+###############################################################################
+. /etc/profile
+. /etc/profile.d/modules.sh
+
+module load fftw
+
+omega=3000
+SETUPDIR=$SCRATCH/rb/rb_shear/fs1e7_rot4a
+WORKDIR=$SCRATCH/rb/rb_shear/fs1e7_rot_$omega
+HOMEDIR=$HOME/rbcode/code_rot
+EXE=rbfs1e7
+NPROC=32
+
+mkdir -p $WORKDIR
+cd $WORKDIR
+
+#cp $HOMEDIR/param* .
+#cp $HOMEDIR/cpuweights .
+#cp $HOMEDIR/inicond170 .
+cp $HOMEDIR/$EXE .
+#cp $SETUPDIR/?0967000.unf .
+#echo 967000 > nrec.d
+#echo 1059000 > nrec.d
+
+cat > param0 << END
+1.7d0                     ptan 1.7
+1.9d0                     qtan 1.5
+300.d0                    Reynolds
+1.d0                  DD   
+6.28318530717958      Lx
+6.28318530717958      Lz
+2.5d-7                  dt
+400000          ndt
+1000          saveevery
+1.d7        Rayleigh
+0.71d0         Prandtl
+1.d0         Kscalar
+1.025e13     Rt
+1.e13        Rs
+3.d0         Le
+${omega}.d0     Omega
+END
+
+# -----------------------------------------------------------------------------
+# *** Start the run
+# -----------------------------------------------------------------------------
+#./inicond170
+mpiexec -n $NPROC $EXE >& rb7.log 
+exit 0
