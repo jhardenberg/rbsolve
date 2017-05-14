@@ -108,14 +108,22 @@ c      write(inum,'(3e16.7)')  ut(i,k,10),ut(i,k,120),ut(i,k,65)
         real*4 ww(MAXCPU),wsum,rest
 
 #ifndef NOMPI      
+#ifdef AUTO_WEIGHTS
       open(unit=11,file='cpuweights')
       wsum=0
       do i=1,NPROC
             read(11,*) ww(i)
             wsum=wsum+ww(i)
       enddo
+      close(11)
+#else
+      do i=1,NPROC
+            ww(i)=1
+            wsum=wsum+ww(i)
+      enddo
+#endif
       nsum2=0
-	rest=0
+      rest=0
       do i=1,NPROC
          il(i)=Ny*ww(i)/wsum
 	 rest=rest+Ny*ww(i)/wsum-il(i)
@@ -126,7 +134,6 @@ c      write(inum,'(3e16.7)')  ut(i,k,10),ut(i,k,120),ut(i,k,65)
         nsum2=nsum2+il(i)
       enddo
       il(1)=il(1)+Ny-nsum2
-      close(11)
 #else
       il(1)=Ny
 #endif      
@@ -134,8 +141,6 @@ c      write(inum,'(3e16.7)')  ut(i,k,10),ut(i,k,120),ut(i,k,65)
          Nyls(i)=il(i)
       enddo
       Nyl=il(iam)
-
-
 
       Nybase=0
       do i=1,iam-1
