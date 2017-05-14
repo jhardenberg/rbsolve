@@ -71,9 +71,9 @@ c	perturbed with white noise on all wavenumbers
         enddo
       enddo
 
-      call savefield(t,'u',0)
-      call savefield(t,'v',0)
-      call savefield(t,'w',0)
+      call savefield(t,'u',0,0.0)
+      call savefield(t,'v',0,0.0)
+      call savefield(t,'w',0,0.0)
 
 c     Crea lo spettro orrizontale
       do i=1,nwax+1
@@ -112,7 +112,7 @@ c     Crea lo spettro verticale (una gaussiana)
           t(1,1,j)=(yv(j)/DD+DD/2)*
      & (TEMPERATURE_TOP-TEMPERATURE_BOTTOM)+TEMPERATURE_BOTTOM      
       enddo
-      call savefield(t,'t',0)
+      call savefield(t,'t',0,0.0)
   
       end
 
