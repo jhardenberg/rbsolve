@@ -300,7 +300,8 @@ c Read in the parameters
       read (11,*) Rt
       read (11,*) Rs
       read (11,*) Le
-      read (11,*) Omega
+      read (11,*) Omegay
+      read (11,*) Omegaz
       close (11)
 
       invRe=1.d0/Re
@@ -322,7 +323,8 @@ c Read in the parameters
       write(*,*) 'Rt',Rt
       write(*,*) 'Rs',Rs
       write(*,*) 'Le',Le
-      write(*,*) 'Omega',Omega
+      write(*,*) 'Omegay',Omegay
+      write(*,*) 'Omegaz',Omegaz
       endif
 #ifdef SALINITY
 	write(*,*) 'SALT FINGERS'

@@ -513,7 +513,8 @@ c VDIFF is defined as invRe and Pr ifdef TEMPERATURE
        call diffus (v_1,VDIFF,qv,rv,sv,K2,Lv_1)
        call diffus (w_1,VDIFF,qv,rv,sv,K2,Lw_1)
 
-       call addrotv (u_1,v_1,Omega,Lu_1,Lv_1)
+c       call addrotw (u_1,v_1,Omega,Lu_1,Lv_1)
+       call addrot (u_1,v_1,w_1,Omegay,Omegaz,Lu_1,Lv_1,Lw_1)
 c       Omega = Omega - dt*50000
 
 ***     Compute new temporary star velocities  

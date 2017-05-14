@@ -66,7 +66,7 @@
 !*************************
 
 !* Do you want a scalar version w/out MPI? uncomment this!  *
-c-#define NOMPI
+!#define NOMPI
 
 !* Use the FFTW libraries, else fall back to the Temperton FFTs.
 !*  If you have these libraries use them! If not, consider installing 

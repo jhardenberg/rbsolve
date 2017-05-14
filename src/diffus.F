@@ -35,7 +35,7 @@ c Calcolo il termine diffusivo
       
 
 
-      subroutine addrotv (u_n,v_n,ff,Lu_n,Lv_n)
+      subroutine addrotw (u_n,v_n,ff,Lu_n,Lv_n)
 
 #include "param.h"
 
@@ -60,4 +60,29 @@ c Calcolo il termine diffusivo
       return
       end 
 
+       subroutine addrot (u_n,v_n,w_n,om_y,om_z,Lu_n,Lv_n,Lw_n)
+ 
+#include "param.h"
+ 
+       complex*16 u_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       complex*16 v_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       complex*16 w_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       complex*16 Lu_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       complex*16 Lv_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       complex*16 Lw_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       real*8 om_y,om_z
+       integer jj
+ 
+       do j=Nylmin,Nylmax
+        do k=1,2*nwaz+1
+         do i=1,nwax+1
+            Lu_n(i,k,j)=Lu_n(i,k,j)+om_y*w_n(i,k,j)-om_z*v_n(i,k,j)
+            Lv_n(i,k,j)=Lv_n(i,k,j)+om_z*u_n(i,k,j)
+            Lw_n(i,k,j)=Lw_n(i,k,j)-om_y*u_n(i,k,j)
+         enddo
+        enddo
+       enddo 
+     
+       return
+       end 
 

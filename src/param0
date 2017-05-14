@@ -13,4 +13,5 @@
 1.025e13     Rt
 1.e13        Rs
 3.d0         Le
-0.d0         Omega
+0.d0         Omegay
+0.d0         Omegaz

@@ -10,7 +10,7 @@ OMPI_F77 =      gfortran
 
 F77COMP	=	gfortran
 LINKER =	gfortran
-CFLAGS =       -O3
+CFLAGS =       -O3 -ffixed-line-length-none
 #LDFLAGS        =   -static -lrfftw -lfftw   -lm
 LDFLAGS        =  -L/opt/local/lib  -lfftw3 -lm
 
@@ -28,11 +28,11 @@ FFTWDIR  = ${FFTW_LIBDIR}
 
 # Intel Fortran Compiler
 
-F77COMP =       ifort
-LINKER =        ifort
-CFLAGS =        -O3   -no-prec-div -mcmodel=medium -shared-intel
-LDFLAGS =  -lfftw3  -lm farg.o  -L ${FFTWDIR}
-LDFLAGS =  -lfftw3   -L ${FFTWDIR}
+#F77COMP =       ifort
+#LINKER =        ifort
+#CFLAGS =        -O3   -no-prec-div -mcmodel=medium -shared-intel
+#LDFLAGS =  -lfftw3  -lm farg.o  -L ${FFTWDIR}
+#LDFLAGS =  -lfftw3   -L ${FFTWDIR}
 
 
 # Intel Fortran Compiler OSX
