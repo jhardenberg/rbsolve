@@ -775,7 +775,7 @@ ctime       tglob1=etime(gdat1)
       subroutine check_CFL(uo,vo,wo,t,dx,dz,yv,dt,rtime)
 
 #include "param.h"
-cmip #include "mpif.h"
+cmpi      include 'mpif.h'
       integer*4 t,jj
       real*8 uo(Nx,Nz,0:Nylmem+1)
       real*8 vo(Nx,Nz,0:Nylmem+1)
