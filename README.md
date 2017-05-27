@@ -1,22 +1,21 @@
-------------------------------------------------------------------------------------------------
-Code to integrate the Navier-Stokes equations using third order 
-Runge-Kutta (Le-Moin, 1981).
-Horizontal derivatives are spectral, vertical derivatives use finite differences.
+# RBsolve
+## Pseudospectral Rayleigh-Bénard Solver
 
-(c) 2003-2007 Rayleigh-Benard, Double diffusion, MPI version 
-     by J. von Hardenberg (ISAC-CNR) and G. Passoni (Poli MI)
-(c) 2002 Navier-Stokes version by G. Passoni
-
-Notes by JvH 2014
-------------------------------------------------------------------------------------------------
-
-* Very short code description *
--------------------------------------
-The code is pseudospectral in the horizontal and finite differences in the vertical using a grid which is denser close to the vertical boundaries.
-MPI parallelization is done using a vertical partitioning in slices.
-
-* Configuration *
 ---------------------
+Horizontal derivatives are spectral, vertical derivatives use finite differences.
+Time advancement uses a third-order fractional step method (Kim and Moin, J. Comp. Phys. 59 (2), 1985)
+
+(c) 2003-2007 Rayleigh-Bénard, Double diffusion by J. von Hardenberg (ISAC-CNR) 
+(c) 2003 MPI version by J. von Hardenberg (ISAC-CNR) and G. Passoni (POLIMI)
+(c) 2002 Navier-Stokes version by G. Passoni (POLIMI)
+
+---------------------
+
+# Very short code description *
+The code is pseudospectral in the horizontal and finite differences in the vertical using a grid which is denser close to the vertical boundaries.
+MPI parallelization uses a vertical partitioning in slices.
+
+# Configuration 
 
 - config.h
 The file config.h contains all options (as CPP define keys) which select the physical structure of the model. So the type of boundary conditions, if the problem is Rayleigh-Benard or Salt Fingering, of if you have the FFTW library is selected here. If you want a 2D problem select ONLY2D.
@@ -46,8 +45,7 @@ where NPROC is the number of cores you plan to use and Nylmem is how may vertica
 - param0
 Set up also the file param0 with all the physical parameters for the experiment (Rayleigh number, domain size etc).
 
-* Compiling *
-----------------
+# Compiling 
 
 - Makefile
 Edit the makefile to set up you compiler and its options some examples are included. For the tools you need to specify in the Makefile that you are compiling without MPI leaving the line "NOMPI=1" uncommented.
@@ -56,9 +54,9 @@ For compiling the main code with MPI you need to comment this line first.
 To make sure that everything is compiled correctly better do a "make clean" first.
 Compile the main code with "make"
 
-* Running *
---------------
-I suggest to create a separate 'run' directory and to copy there the following files:
+
+# Running 
+We suggest to create a separate 'run' directory and to copy there the following files:
 
 * param0 (The main physical parameter file)
 * param1 (parameters for timestepping - leave this one alone)
@@ -68,13 +66,12 @@ I suggest to create a separate 'run' directory and to copy there the following f
 You can create initial conditions with "inicond" which will create a  randomly perturbed (on T) linear conductive solution. This will create initial files for t,u,v,w and a nrec.d file (containing the number 0).
 The file nrec.d contains always the timestep of the latest save. When the code starts it checks for this file and restarts from the timestep it indicates.
 
-* Tools *
------------
+# Tools 
 
 The subdirectory 'tools' contains some useful tools, such as tools for extracting vertical profiles (prof) , horizontal and vertical slices (sectionh and sectionv) or spectra. To compile, if not already there, copy the relevant source .F file in the same directory as the Makefile. The command alone gives a short explanation on its usage.
 
-* Out-of-the-box examples *
-----------------------------------
+# Out-of-the-box examples 
+
 The example code is set up for a Ra=1e7 run, starting from an initial conductive solution with RB standard Dirichlet BCs. The code is set up for a MPI run with 8 cores.
 
 After setting up the Makefile correctly for your compiler (see above) you can try the following:
@@ -101,8 +98,7 @@ mpiexec -n 8 ./rb
 ./sectionv t 96 2000
 
 
-* References to the code *
---------------------------
+# References to the code 
 
 - J. von Hardenberg, A.Parodi, G. Passoni, A. Provenzale, E.A Spiegel, 2008: Large-scale patterns in Rayleigh-Benard convection. Physics Letters A, 372, 2223-2229.
 - A. Parodi, J. von Hardenberg, G. Passoni, A. Provenzale and E.A Spiegel. Clustering of plumes in turbulent convection. Phys. Rev. Lett. 92 (19), 194503 (2004).
