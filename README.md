@@ -23,24 +23,27 @@ config.h also contains a line
 uncomment this line if you would like to compile a scalar ( not MPI ) version of the code, but leave it for compiling the tools which are all serial.
 
 At the bottom notice the definitions
+```
 #define VDIFF (Pr)
 #define BUOYT (Ra*Pr)
 #define TDIFF (1.d0)
-which imply that the problem is solved using the normalization where in the equations: Pr is in front of the Laplacian in the momentum equation, Ra*Pr is in front of the buoyancy term and the normal thermal diffusivity is 1. In theory one could change these definitions and solve directly the equations using a different normalization convention. Suggestion: do not touch.
+```
+which imply that the problem is solved using the normalization where in the equations: `Pr` is in front of the Laplacian in the momentum equation, `Ra*Pr` is in front of the buoyancy term and the normal thermal diffusivity is 1. In theory one could change these definitions and solve directly the equations using a different normalization convention. Suggestion: do not touch.
 
-- param.h
+- `param.h`
 The file param.h is used to select the resolution of the model. 
 Just comment or uncomment one of the many example lines.
 You will need to set Nx and Nz (the horizontal resolution) and Ny (the vertical resolution) - The code follows an engineering convention by which the vertical is y.
 There is a second set of resolutions to define, the spectral resolutions. These should take into account de-aliasing. For this code a 4/5 dealiasing (softer than the classical 2/3) has been found to work well. So, set kx=4/5 Nx and kz=4/5 Nx (rounded at the closest EVEN integer).
 
 If you are compiling for MPI you will also need to set the two parameter variables (at the bottom):
-      parameter (Nylmem=17)
-      parameter  (NPROC=8)
+```
+      parameter (Nylmem=17)
+      parameter  (NPROC=8)
+```
+where NPROC is the number of cores you plan to use and Nylmem is how may vertical layers to allocate for each 'slice'   associated with each core. This should be slightly in excess of `Ny/NPROC`.
 
-where NPROC is the number of cores you plan to use and Nylmem is how may vertical layers to allocate for each 'slice'   associated with each core. This should be slightly in excess of Ny/NPROC.
-
-- param0
+- `param0`
 Set up also the file param0 with all the physical parameters for the experiment (Rayleigh number, domain size etc).
 
 # Compiling 
@@ -56,9 +59,9 @@ Compile the main code with "make"
 # Running 
 We suggest to create a separate 'run' directory and to copy there the following files:
 
-* param0 (The main physical parameter file)
-* param1 (parameters for timestepping - leave this one alone)
-* cpuweights (a silly file with a lot of 1 values - This one is used only if you have a cluster of very different machines and you want to distribute the load differently among them - just use it as it is)
+* `param0` (The main physical parameter file)
+* `param1` (parameters for timestepping - leave this one alone)
+* `cpuweights` (a silly file with a lot of 1 values - This one is used only if you have a cluster of very different machines and you want to distribute the load differently among them - just use it as it is)
 * rb  (our executable)
 
 You can create initial conditions with "inicond" which will create a  randomly perturbed (on T) linear conductive solution. This will create initial files for t,u,v,w and a nrec.d file (containing the number 0).
@@ -76,25 +79,31 @@ After setting up the Makefile correctly for your compiler (see above) you can tr
  
 1. Create some tools:
 - Edit Makefile and leave active the line "NOMPI = 1"
-make inicond   
+```
+make inicond   
 make sectionh 
 make sectionv
 make prof
+```
 
 2. Compile and run the code
 
 - Edit Makefile and comment out the line "NOMPI = 1"
+```
 make clean
 make
 ./inicond
 mpiexec -n 8 ./rb
-
+```
 3. Make a vertical profile at time 2000:
+```
 ./prof t 2000
+```
 
 4. Make a vertical section (at y=96, step=2000)
+```
 ./sectionv t 96 2000
-
+```
 
 # References to the code 
 
