@@ -1,9 +1,7 @@
 # RBsolve
 ## Pseudospectral Rayleigh-Bénard Solver
-
 ---------------------
-Horizontal derivatives are spectral, vertical derivatives use finite differences.
-Time advancement uses a third-order fractional step method (Kim and Moin, J. Comp. Phys. 59 (2), 1985)
+A fast parallel Fortran code which integrates the Rayleigh-Bénard convection equations in the Boussinesq approximation for an horizontally periodic geometry. Free-slip and no-slip, Dirichlet and von Neumann boundary conditions are supported. Supports also a second active scalar allowingt o solve doubly diffusive problems. The code can also be used for DNS simulations of the Navier-Stokes equations.
 
 (c) 2003-2007 Rayleigh-Bénard, Double diffusion by J. von Hardenberg (ISAC-CNR) 
 (c) 2003 MPI version by J. von Hardenberg (ISAC-CNR) and G. Passoni (POLIMI)
@@ -11,8 +9,8 @@ Time advancement uses a third-order fractional step method (Kim and Moin, J. Com
 
 ---------------------
 
-# Very short code description *
-The code is pseudospectral in the horizontal and finite differences in the vertical using a grid which is denser close to the vertical boundaries.
+# Very short code description 
+The code is pseudospectral in the horizontal and finite differences in the vertical using a grid which is denser close to the vertical boundaries. Time advancement uses a third-order fractional step method (Kim and Moin, J. Comp. Phys. 59 (2), 1985)
 MPI parallelization uses a vertical partitioning in slices.
 
 # Configuration 
