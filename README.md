@@ -3,7 +3,9 @@
 
 
 (c) 2003-2007 Rayleigh-Bénard, Double diffusion by J. von Hardenberg (ISAC-CNR) 
+
 (c) 2003 MPI version by J. von Hardenberg (ISAC-CNR) and G. Passoni (POLIMI)
+
 (c) 2002 Navier-Stokes version by G. Passoni (POLIMI)
 
 
