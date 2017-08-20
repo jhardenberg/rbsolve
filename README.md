@@ -80,9 +80,9 @@ If you are compiling for MPI you will also need to set the two parameter variabl
 where NPROC is the number of cores you plan to use and Nylmem is how may vertical layers to allocate for each 'slice' associated with each core. This should be slightly in excess of Ny/NPROC.
 EXAMPLE:
  
-     parameter (Nylmem=17)
-     parameter  (NPROC=8)
-
+   parameter (Nylmem=17)
+   parameter  (NPROC=8)
+   
 for the Ny=129 case.
 
 
