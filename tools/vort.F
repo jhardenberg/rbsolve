@@ -85,13 +85,12 @@
       call read_para(0)
       call Crea_wave(kxm,kzm,K2,mm,nn,kxmin,kzmin)
 
-      open(unit=22,file='vortdiv.dat',form='formatted')
-      open(unit=33,file='jacobian.dat',form='formatted')
       do it=istart,iend,istep
+      call makenamebob(file0,'z',it,'.dat')
+        print *,file0
             call readfield(u,'u',it)
             call readfield(v,'w',it)
             call readfield(t,'t',it)
-   	print *,'a+'
 	    do i=1,nwax+1
               do k=1,2*nwaz+1
                  do j=0,Ny+1
@@ -102,33 +101,24 @@
                  enddo
               enddo
            enddo
+      open(unit=22,file=file0,form='formatted')
 	  call Fourier1 (ux,uxo)
 	  call Fourier1 (uy,uyo)
 	  call Fourier1 (vx,vxo)
 	  call Fourier1 (vy,vyo)
 	  call Fourier1 (t,to)
-          
+        print *,'writing'    
             do k=1,Nz
                do i=1,Nx
-                    vvm=0.
-                    ttm=0.
-                     ddm=0.
-                   do jj=1,Ny/2
-                       vvm=vvm+vxo(i,k,jj)-uyo(i,k,jj)
-                       ddm=ddm+vyo(i,k,jj)+uxo(i,k,jj)
-                       ttm=ttm+to(i,k,jj)
-                   enddo
-                    vvm=vvm/Ny*2
-		ddm=ddm/Ny*2
-		    ttm=ttm/Ny*2
-	write(22,*) vvm,ddm,ttm
+                       vvm=vxo(i,k,jj)-uyo(i,k,jj)
+                       ddm=vyo(i,k,jj)+uxo(i,k,jj)
+                       ttm=to(i,k,jj)
+	        write(22,*) vvm,ddm,ttm
 	       enddo
-	    enddo
+	     enddo
 
-	  
+	  close(22) 
       enddo
-      close(20)
-      close(30)
 
       end
 
