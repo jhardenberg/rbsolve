@@ -154,8 +154,12 @@ spectrumx: $(SPECTRUMX_OBJ)
 	$(COMP)  $(CFLAGS) -D"NOMPI"  -o spectrumx $(SPECTRUMX_OBJ) $(LDFLAGS)
 
 VORT_OBJ    =       vort.o  fourier1.o fourier1_tmpt.o tools.o salva.o 
-vort: $(KMAX_OBJ)
+vort: $(VORT_OBJ)
 	$(COMP)  $(CFLAGS) -D"NOMPI"  -o vort $(VORT_OBJ) $(LDFLAGS)
+
+VORT3D_OBJ    =       vort3d.o  fourier1.o fourier1_tmpt.o tools.o salva.o punti.o
+vort: $(VORT3D_OBJ)
+	$(COMP)  $(CFLAGS) -D"NOMPI"  -o vort3d $(VORT3D_OBJ) $(LDFLAGS)
 
 KMAXZ_OBJ    =       kmaxz.o tools.o salva.o
 kmaxz: $(KMAXZ_OBJ)
