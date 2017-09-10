@@ -26,7 +26,7 @@ MPI parallelization is available and performed using a vertical partitioning in 
 
 
 
-** Configuration **
+**Configuration**
 ---------------------
 - config.h
 
@@ -103,13 +103,13 @@ Set up also the file param0 with all the physical parameters for the experiment:
     Rs = Saline Rayleigh number
     Rt = Thermal Rayleigh number
     ~~Kscalar~~ = TO BE REMOVED 
-    ptan =
-    qtan =
+    ptan = ?
+    qtan = ?
 
 
 
 
-** Compiling **
+**Compiling**
 ----------------
 - Makefile
 
@@ -128,7 +128,7 @@ Uncomment this line if you would like to compile a scalar (not MPI) version of t
 
 
 
-** Running **
+**Running**
 --------------
 It's highly recommended to create a separate 'run' directory and to copy there the following files:
 
@@ -143,7 +143,7 @@ The file nrec.d contains always the timestep of the latest save. When the code s
 
 
 
-** Tools **
+**Tools**
 -----------
 The subdirectory 'tools' contains some useful tools.
 The command alone gives a short explanation on its usage. Below a short list with some examples:
@@ -180,8 +180,8 @@ Tools have to be compiled necessarily BEFORE the compilation of the code (see ou
 
 
 
-** Out-of-the-box examples **
-----------------------------------
+**Out-of-the-box examples**
+----------------------------
 The example code is set up for a Ra=1e7 run, starting from an initial conductive solution with RB standard Dirichlet BCs. 
 The code is set up for a MPI run with 8 cores.
 
@@ -226,10 +226,10 @@ The equations are non-dimensionalized respect to te diffusive time scale ( tau_{
 Others characteristic times scale are tau_{dyn} = ( D/(g*beta*deltaT) )^1/2, tau_{diss} = D^2/( ( k * nu )^1/2 ), tau_{vis} = D^2/nu see [1].	
 
 
-** References to the code **
+**References to the code**
 --------------------------
-[1] J. von Hardenberg; D. Goluskin; A. Provenzale; E. A. Spiegel, 2015: Generation of Large-Scale Winds in Horizontally Anisotropic Convection. Physical Review Letters, Volume 115, Issue 13, id.134501
-[2] J. von Hardenberg, A.Parodi, G. Passoni, A. Provenzale, E.A Spiegel, 2008: Large-scale patterns in Rayleigh-Benard convection. Physics Letters A, 372, 2223-2229.
+[1] J. von Hardenberg; D. Goluskin; A. Provenzale; E. A. Spiegel. Generation of Large-Scale Winds in Horizontally Anisotropic Convection. Physical Review Letters, Volume 115, Issue 13, id.134501 (2015).
+[2] J. von Hardenberg, A.Parodi, G. Passoni, A. Provenzale, E.A Spiegel. Large-scale patterns in Rayleigh-Benard convection. Physics Letters A, 372, 2223-2229 (2008).
 [3] A. Parodi, J. von Hardenberg, G. Passoni, A. Provenzale and E.A Spiegel. Clustering of plumes in turbulent convection. Phys. Rev. Lett. 92 (19), 194503 (2004).
 [4] G. Passoni, G. Alfonsi, and M. Galbiati, Int. J. Numer. Methods Fluids 38, 1069 (2002).
 
