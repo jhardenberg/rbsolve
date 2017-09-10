@@ -1,8 +1,6 @@
 # RBsolve
 ## Pseudospectral Rayleigh-Bénard Solver
 
-(c) J. von Hardenberg; D. Goluskin; A. Provenzale; E. A. Spiegel, 2015: Generation of Large-Scale Winds in Horizontally Anisotropic Convection. Physical Review Letters, Volume 115, Issue 13, id.134501
-
 (c) 2003-2007 Rayleigh-Bénard, Double diffusion by J. von Hardenberg (ISAC-CNR) 
 
 (c) 2003 MPI version by J. von Hardenberg (ISAC-CNR) and G. Passoni (POLIMI)
@@ -104,7 +102,7 @@ Set up also the file param0 with all the physical parameters for the experiment:
     Omega = 2*angular speed
     Rs = Saline Rayleigh number
     Rt = Thermal Rayleigh number
-    ~~Kscalar~~ = TO BE REMOVE 
+    ~~Kscalar~~ = TO BE REMOVED 
     ptan =
     qtan =
 
@@ -222,10 +220,16 @@ After setting up the Makefile correctly for your compiler (see above) you can tr
   ./sectionv t 96 2000
 
 
+PHYSICAL FEATURES: (TO BE DEVELOPED)
+
+The equations are non-dimensionalized respect to te diffusive time scale ( tau_{th} = D^2/k ).
+Others characteristic times scale are tau_{dyn} = ( D/(g*beta*deltaT) )^1/2, tau_{diss} = D^2/( ( k * nu )^1/2 ), tau_{vis} = D^2/nu see [1].	
+
 
 ** References to the code **
 --------------------------
-- J. von Hardenberg, A.Parodi, G. Passoni, A. Provenzale, E.A Spiegel, 2008: Large-scale patterns in Rayleigh-Benard convection. Physics Letters A, 372, 2223-2229.
-- A. Parodi, J. von Hardenberg, G. Passoni, A. Provenzale and E.A Spiegel. Clustering of plumes in turbulent convection. Phys. Rev. Lett. 92 (19), 194503 (2004).
-- G. Passoni, G. Alfonsi, and M. Galbiati, Int. J. Numer. Methods Fluids 38, 1069 (2002).
+[1] J. von Hardenberg; D. Goluskin; A. Provenzale; E. A. Spiegel, 2015: Generation of Large-Scale Winds in Horizontally Anisotropic Convection. Physical Review Letters, Volume 115, Issue 13, id.134501
+[2] J. von Hardenberg, A.Parodi, G. Passoni, A. Provenzale, E.A Spiegel, 2008: Large-scale patterns in Rayleigh-Benard convection. Physics Letters A, 372, 2223-2229.
+[3] A. Parodi, J. von Hardenberg, G. Passoni, A. Provenzale and E.A Spiegel. Clustering of plumes in turbulent convection. Phys. Rev. Lett. 92 (19), 194503 (2004).
+[4] G. Passoni, G. Alfonsi, and M. Galbiati, Int. J. Numer. Methods Fluids 38, 1069 (2002).
 
