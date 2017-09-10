@@ -1,6 +1,7 @@
 # RBsolve
 ## Pseudospectral Rayleigh-Bénard Solver
 
+(c) J. von Hardenberg; D. Goluskin; A. Provenzale; E. A. Spiegel, 2015: Generation of Large-Scale Winds in Horizontally Anisotropic Convection. Physical Review Letters, Volume 115, Issue 13, id.134501
 
 (c) 2003-2007 Rayleigh-Bénard, Double diffusion by J. von Hardenberg (ISAC-CNR) 
 
@@ -93,9 +94,9 @@ Set up also the file param0 with all the physical parameters for the experiment:
 
     Lx & Lz = horizontal domain sizes
     DD = vertical domain size
-    dt = time step width
-    ndt = tot # of time steps
-    saveevery = writing time (example: dt=2e-7  saveevery=500  write at= )
+    dt = time step width 
+    ndt = tot # of time steps (if dt=1e-7 and you want to simulate in [0,2] you should set ndt=2e7)
+    saveevery = writing time (example: dt=2e-7  saveevery=5e2  write at=1e-4 )
     Ra = Rayleigh number
     Pr = Prandtl number
     Le = Lewis number
@@ -103,7 +104,7 @@ Set up also the file param0 with all the physical parameters for the experiment:
     Omega = 2*angular speed
     Rs = Saline Rayleigh number
     Rt = Thermal Rayleigh number
-    Kscalar =
+    ~~Kscalar~~ = TO BE REMOVE 
     ptan =
     qtan =
 
