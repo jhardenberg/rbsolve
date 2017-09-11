@@ -130,7 +130,7 @@ This will create initial files for t,u,v,w and a nrec.d file (containing the num
 The file `nrec.d` contains always the timestep of the latest save. When the code starts it checks for this file and restarts from the timestep it indicates.
 
 ## Tools ##
------------
+
 The subdirectory 'tools' contains some useful tools.
 The command alone gives a short explanation on its usage. Below a short list with some examples:
 
