@@ -161,7 +161,7 @@ Usage: `./cfl 2000 3000 40 `
 To compile, if not already there, copy the relevant source .F file in the same directory as the Makefile. 
 Tools have to be compiled necessarily BEFORE the compilation of the code (see out-of-the-box examples).
 
-#@ Out-of-the-box examples ##
+## Out-of-the-box examples ##
 
 The example code is set up for a Ra=1e7 run, starting from an initial conductive solution with RB standard Dirichlet BCs. 
 The code is set up for a MPI run with 8 cores.
@@ -172,23 +172,23 @@ After setting up the Makefile correctly for your compiler (see above) you can tr
 
 Edit Makefile and leave active the line "NOMPI = 1"
 
-  make inicond   
-  make sectionh 
-  make sectionv
-  make prof
+    make inicond   
+    make sectionh 
+    make sectionv
+    make prof
 
 2. Compile and run the code:
 
   Edit Makefile and comment out the line "NOMPI = 1"
 
-  make clean
-  make
-  ./inicond
-  mpiexec -n 8 ./rb
+    make clean
+    make
+    ./inicond
+    mpiexec -n 8 ./rb
 
 3. Make a vertical profile (at time 2000):
 
-  ./prof t 2000
+    ./prof t 2000
 
 4. Make a vertical section (at y=96, step=2000):
 
