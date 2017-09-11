@@ -195,7 +195,7 @@ Edit Makefile and leave active the line "NOMPI = 1"
     `./sectionv t 96 2000`
 
 
-## References to the code ##
+## References ##
 
 [1] J. von Hardenberg; D. Goluskin; A. Provenzale; E. A. Spiegel. Generation of Large-Scale Winds in Horizontally Anisotropic Convection. Physical Review Letters, Volume 115, Issue 13, id.134501 (2015).
 
