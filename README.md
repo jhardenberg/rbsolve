@@ -188,17 +188,20 @@ Edit Makefile and leave active the line "NOMPI = 1"
 
 3. Make a vertical profile (at time 2000):
 
-    ./prof t 2000
+     `./prof t 2000`
 
 4. Make a vertical section (at y=96, step=2000):
 
-   ./sectionv t 96 2000
+    `./sectionv t 96 2000`
 
 
 ## References to the code ##
 
 [1] J. von Hardenberg; D. Goluskin; A. Provenzale; E. A. Spiegel. Generation of Large-Scale Winds in Horizontally Anisotropic Convection. Physical Review Letters, Volume 115, Issue 13, id.134501 (2015).
+
 [2] J. von Hardenberg, A.Parodi, G. Passoni, A. Provenzale, E.A Spiegel. Large-scale patterns in Rayleigh-Benard convection. Physics Letters A, 372, 2223-2229 (2008).
+
 [3] A. Parodi, J. von Hardenberg, G. Passoni, A. Provenzale and E.A Spiegel. Clustering of plumes in turbulent convection. Phys. Rev. Lett. 92 (19), 194503 (2004).
+
 [4] G. Passoni, G. Alfonsi, and M. Galbiati, Int. J. Numer. Methods Fluids 38, 1069 (2002).
 
