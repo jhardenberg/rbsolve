@@ -161,7 +161,7 @@ Usage: `./cfl 2000 3000 40 `
 To compile, if not already there, copy the relevant source .F file in the same directory as the Makefile. 
 Tools have to be compiled necessarily BEFORE the compilation of the code (see out-of-the-box examples).
 
-## Out-of-the-box examples ##
+## Usage examples ##
 
 The example code is set up for a Ra=1e7 run, starting from an initial conductive solution with RB standard Dirichlet BCs. 
 The code is set up for a MPI run with 8 cores.
