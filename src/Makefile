@@ -63,7 +63,8 @@ endif
 
 NAVIER_OBJ	=	boundary.o build_star.o conv.o crea_df.o \
 			crea_e.o diffus.o fourier1.o  \
-			fourier2.o  \
+			fourier2.o tn_prinf_helmp.o prinf_helmp.o  \
+			tn_prinf_helmu.o prinf_helmu.o  \
 			main.o mpitools.o poiss_im.o punti.o salva.o tn_poiss.o \
 			tools.o tridiagmpi.o velocita.o farg.o
 
@@ -305,6 +306,11 @@ slice.o: config.h param.h
 spectrumh.o: config.h param.h
 spectrumx.o: config.h param.h
 spectrumt.o: config.h param.h
+tn_poiss.o: config.h param.h
+tn_prinf_helmp.o: config.h param.h
+prinf_helmp.o: config.h param.h
+tn_prinf_helmu.o: config.h param.h
+prinf_helmu.o: config.h param.h
 tn_poiss.o: config.h param.h
 tools.o: config.h param.h
 tridiagmpi.o: config.h
