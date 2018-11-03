@@ -15,6 +15,8 @@
 !*   PHYSICS              *
 !**************************
 
+#define PRINF
+
 !* Convective code *
 #define TEMPERATURE
 

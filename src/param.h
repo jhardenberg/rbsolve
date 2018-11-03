@@ -13,7 +13,7 @@
 !        parameter (Nx=384,Ny=385,Nz=384)
 !        parameter (kx=336	,kz=336)
 
-        parameter (Nx=256,Ny=192,Nz=256)
+        parameter (Nx=256,Ny=193,Nz=256)
         parameter (kx=170,kz=170)
 !        parameter (kx=204,kz=204)
 

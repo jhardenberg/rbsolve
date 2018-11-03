@@ -238,11 +238,23 @@ cmpi      call MPI_FINALIZE(ierr)
       real*8 F(nwax+1,2*nwaz+1,Nylmem)
 
 #define NX ((nwax+1)*(2*nwaz+1))
+#define NNR (2*NPROC-2)
+
+#ifdef PRINF 
+      real*8 Dv(nwax+1,2*nwaz+1,Nylmem)
+      real*8 Ev(nwax+1,2*nwaz+1,Nylmem)
+      real*8 Fv(nwax+1,2*nwaz+1,Nylmem)
+      real*8 xlhv(NX,Nylmem)
+      real*8 xuhv(NX,Nylmem)
+      real*8 redav(NX,0:NNR+1)
+      real*8 redbv(NX,0:NNR+1)
+      real*8 redcv(NX,0:NNR+1)
+      complex*16 redrv(NX,0:NNR+1)
+#endif
 
       real*8 xlh(NX,Nylmem)
       real*8 xuh(NX,Nylmem)
 
-#define NNR (2*NPROC-2)
       real*8 reda(NX,0:NNR+1)
       real*8 redb(NX,0:NNR+1)
       real*8 redc(NX,0:NNR+1)
@@ -272,8 +284,8 @@ c Read in initial condition
 	print *,'reading nrec'
         open(unit=10,file='nrec.d')
         read(10,*,end=111) itime,rtime
+ 111	continue
         close(10)
- 111    continue
 #ifndef NOMPI
         call ibroadcast(itime,SAVENODE)
         call rbroadcast(rtime,SAVENODE)
@@ -399,16 +411,25 @@ c Computation of the y-grid parameters
 c Computation of the tridiagonal matrices for the pressure Helmoltz eq.
 c These are not dependent on the wave number
 
+#ifndef PRINF
       call Crea_DF (qp,sp,D,F)
       call Crea_E  (qp,rp,sp,K2,E)
-  
 * Compute static part of tridiagonal problem
 * D and F are changed, uo and vo are used as temporary storage
-
       call tridlhs(D,E,F,reda,redb,redc,xlh,xuh,
      +             uo,vo,Nylmax1,NX,NPROC,iam)
- 
-
+#else
+      call Crea_DF_prinf (qp,sp,D,F)
+      call Crea_DF_prinf_u (qv,sv,Dv,Fv)
+      call Crea_E_prinf  (qp,rp,sp,yp,K2,E,Ra)
+      call Crea_E_prinf_u  (qv,rv,sv,yv,K2,Ev,Ra)
+* Compute static part of tridiagonal problem
+* D and F are changed, uo and vo are used as temporary storage
+      call tridlhs(D,E,F,reda,redb,redc,xlh,xuh,
+     +             uo,vo,Nylmax1,NX,NPROC,iam)
+      call tridlhs(Dv,Ev,Fv,redav,redbv,redcv,xlhv,xuhv,
+     +             uo,vo,Nylmax,NX,NPROC,iam)
+#endif
 
 c Mean pressure gradient
 c      tauw=2.d0*invRe  (for laminar flow only with center velocity)
@@ -462,6 +483,24 @@ ctime       ttot0=etime(tdat0)
 #endif
 
 #endif
+
+
+ccc    JJJJJJ
+       call prinf_helmp (t_1,D,E,F,yv, kxm,kzm,p,l,
+     +     xlh,xuh,reda,redb,redc,redr,Ra )
+       call savefield(p,'p',itime,rtime)
+
+       call prinf_helmu (p,t_1,D,E,F,yp,
+     +     kxm,kzm,u_1,
+     +     v_1,w_1,
+     +     l,xlhv,xuhv,redav,redbv,redcv,redrv,Ra )
+       call savefield(u_1,'u',itime,rtime)
+       call savefield(v_1,'v',itime,rtime)
+       call savefield(w_1,'w',itime,rtime)
+ccc    JJJJJJ
+       stop
+
+
 
 ***********   MAIN LOOP  **************************
 
