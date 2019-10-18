@@ -484,22 +484,21 @@ ctime       ttot0=etime(tdat0)
 
 #endif
 
-
 ccc    JJJJJJ
-       call prinf_helmp (t_1,D,E,F,yv, kxm,kzm,p,l,
-     +     xlh,xuh,reda,redb,redc,redr,Ra )
-       call savefield(p,'p',itime,rtime)
-
-       call prinf_helmu (p,t_1,Dv,Ev,Fv,yp,
-     +     kxm,kzm,u_1,
-     +     v_1,w_1,
-     +     l,xlhv,xuhv,redav,redbv,redcv,redrv,Ra )
-       call savefield(u_1,'u',itime,rtime)
-       call savefield(v_1,'v',itime,rtime)
-       call savefield(w_1,'w',itime,rtime)
+ccc    This used to be an initial test
+ccc    Everything looks ok
+c       call prinf_helmp (t_1,D,E,F,yv, kxm,kzm,p,l,
+c     +     xlh,xuh,reda,redb,redc,redr,Ra )
+c       call savefield(p,'p',itime,rtime)
+c
+c       call prinf_helmu (p,t_1,Dv,Ev,Fv,yp,
+c     +     kxm,kzm,u_1,
+c     +     v_1,w_1,
+c     +     l,xlhv,xuhv,redav,redbv,redcv,redrv,Ra )
+c       call savefield(u_1,'u',itime,rtime)
+c       call savefield(v_1,'v',itime,rtime)
+c      call savefield(w_1,'w',itime,rtime)
 ccc    JJJJJJ
-       stop
-
 
 
 ***********   MAIN LOOP  **************************
@@ -533,6 +532,16 @@ c Time-advancement over 3 substeps
 
 ctime       ttot0=etime(tdat0)
 *   Lu_1, Lv_1, Lw_1  are used as temporary workspace in conv
+#ifdef PRINF
+* Compute pressure in prinf case
+       call prinf_helmp (t_1,D,E,F,yv, kxm,kzm,p,l,
+     +     xlh,xuh,reda,redb,redc,redr,Ra )
+* Compute velocities in prinf case
+       call prinf_helmu (p,t_1,Dv,Ev,Fv,yp,
+     +     kxm,kzm,u_1,
+     +     v_1,w_1,
+     +     l,xlhv,xuhv,redav,redbv,redcv,redrv,Ra )
+#else
 
        call conv (uo,vo,wo,
      &   yv,mm,nn,Nu_1,Nv_1,Nw_1,
@@ -650,7 +659,8 @@ ctime     &              ' s:',tdat(2)-tdat0(2)
 
 ***   Enforce vertical boundary conditions   ***
        call boundary(u_1,v_1,w_1)
-
+! not PRINF
+#endif 
 
 #ifdef TEMPERATURE
 *     For temperature we do not use the index switching trick
@@ -789,6 +799,7 @@ c Save the spectral velocity fields
        call savefield(u_1,'u',itime,rtime)
        call savefield(v_1,'v',itime,rtime)
        call savefield(w_1,'w',itime,rtime)
+       call savefield(p,'p',itime,rtime) ! For diagnostics, to be removed
 
 #ifdef TEMPERATURE
        call savefield(t_1,'t',itime,rtime)
