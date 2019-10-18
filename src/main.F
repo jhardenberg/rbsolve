@@ -490,7 +490,7 @@ ccc    JJJJJJ
      +     xlh,xuh,reda,redb,redc,redr,Ra )
        call savefield(p,'p',itime,rtime)
 
-       call prinf_helmu (p,t_1,D,E,F,yp,
+       call prinf_helmu (p,t_1,Dv,Ev,Fv,yp,
      +     kxm,kzm,u_1,
      +     v_1,w_1,
      +     l,xlhv,xuhv,redav,redbv,redcv,redrv,Ra )
