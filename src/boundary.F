@@ -68,24 +68,39 @@ c VELOCITY boundary conditions
       return
       end  
 
-
 #ifdef TEMPERATURE
-
-      subroutine boundary_temp (tt,yv)
 c TEMPERATURE boundary condition
 
+#if defined (PATTERNT_TOP) || defined (PATTERNT_BOTTOM)
+      subroutine boundary_temp (tt,yv,ttop,tbot)
+#else
+      subroutine boundary_temp (tt,yv)
+#endif
 
 #include "param.h"
 
-
       complex*16 tt(nwax+1,2*nwaz+1,0:Nylmem+1)
+#if defined (PATTERNT_TOP) || defined (PATTERNT_BOTTOM)
+      complex*16 ttop(nwax+1,2*nwaz+1)
+      complex*16 tbot(nwax+1,2*nwaz+1)
+#endif
       real*8 yv(0:Ny+1)
 
 #include "allpara.h"
 
 **************** Dirichlet boundary conditions *************
-
+ 
 #ifdef TEMPERATURE_BOTTOM
+#ifdef PATTERNT_BOTTOM
+* Temperature pattern at bottom
+      if(iam.eq.1) then
+        do k=1,2*nwaz+1
+         do i=1,nwax+1
+          tt(i,k,1)=tbot(i,k)
+         enddo
+        enddo
+      endif
+#else
 * Fixed temperature at bottom
       if(iam.eq.1) then
        do k=1,2*nwaz+1
@@ -96,8 +111,19 @@ c TEMPERATURE boundary condition
        tt(1,1,1)=( TEMPERATURE_BOTTOM ,0.d0)
       endif
 #endif
+#endif
 
 #ifdef TEMPERATURE_TOP
+#ifdef PATTERNT_TOP
+* Temperature pattern at bottom
+      if(iam.eq.NPROC) then
+        do k=1,2*nwaz+1
+         do i=1,nwax+1
+          tt(i,k,1)=ttop(i,k)
+         enddo
+        enddo
+      endif
+#else
 * Fixed temperature at top
        if(iam.eq.NPROC) then
        do k=1,2*nwaz+1
@@ -108,7 +134,7 @@ c TEMPERATURE boundary condition
        tt(1,1,Nyl)=( TEMPERATURE_TOP ,0.d0)
       endif
 #endif
-
+#endif
 
 **************** von Neumann boundary conditions *************
 

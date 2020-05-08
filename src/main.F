@@ -195,6 +195,13 @@ cmpi      call MPI_FINALIZE(ierr)
       integer it1
       parameter (it1=4)
 
+#if defined (PATTERNT_TOP)  || defined (PATTERNT_BOTTOM)
+      complex*16 ttop(nwax+1,2*nwaz+1)
+      complex*16 tbot(nwax+1,2*nwaz+1)
+      real*8 ttopo(Nx,Nz)
+      real*8 tboto(Nx,Nz)
+#endif
+
       complex*16 t_2(nwax+1,2*nwaz+1,0:Nylmem+1)
       complex*16 Lt(nwax+1,2*nwaz+1,0:Nylmem+1,2)
       complex*16 Nt(nwax+1,2*nwaz+1,0:Nylmem+1,2)
@@ -257,8 +264,6 @@ cmpi      call MPI_FINALIZE(ierr)
 
       integer idum
       real*8 ran2,rtime
-
-	
 
       ilu1=1
       ilu2=2
@@ -361,6 +366,21 @@ c     reads the old (antonio et al) format, works only on single cpu ....
 #endif
       endif
 
+#ifdef TEMPERATURE
+#ifdef PATTERNT_TOP
+      open(unit=10,file='temperature_top.dat')
+      read(10,*) ((ttopo(i,k),i=1,Nx),k=1,Nz) 
+      close(10)
+      call Fourier2_single2d(ttopo,ttop)
+#endif
+#ifdef PATTERNT_BOTTOM
+      open(unit=10,file='temperature_bottom.dat')
+      read(10,*) ((tboto(i,k),i=1,Nx),k=1,Nz) 
+      close(10)
+      call Fourier2_single2d(tboto,tbot)
+#endif
+#endif
+
 c Controllo le condizioni iniziali di T
 
 c	Diagnostics
@@ -408,8 +428,6 @@ c These are not dependent on the wave number
       call tridlhs(D,E,F,reda,redb,redc,xlh,xuh,
      +             uo,vo,Nylmax1,NX,NPROC,iam)
  
-
-
 c Mean pressure gradient
 c      tauw=2.d0*invRe  (for laminar flow only with center velocity)
 c  for turbulent flow with friction velocity:
@@ -420,14 +438,17 @@ c  for turbulent flow with friction velocity:
        call boundary(u_1,v_1,w_1)
 
 #ifdef TEMPERATURE
+#if defined (PATTERNT_TOP)  || defined (PATTERNT_BOTTOM)
+       call boundary_temp(t_1,yv,ttop,tbot)
+#else
        call boundary_temp(t_1,yv)
+#endif
 #endif
 #ifdef SALINITY
        call boundary_scalar(s_1,yv)
 #endif
 
 ****   Exchange velocities between domains   ***
-
 
        call mpighost(u_1)
 
@@ -446,7 +467,6 @@ ctime       ttot0=etime(tdat0)
        call Fourier1 (u_1,uo) 
        call Fourier1 (v_1,vo) 
        call Fourier1 (w_1,wo)
-	
        call check_CFL(uo,vo,wo,itime,dx,dz,yv,dt,rtime)
 
 #ifdef JOST
@@ -632,8 +652,13 @@ ctime     &              ' s:',tdat(2)-tdat0(2)
      +    Nt_1,Nt_2,
      +    alfa,beta,gamma,zeta,l,t_1)
 
+#ifdef TEMPERATURE
+#if defined (PATTERNT_TOP)  || defined (PATTERNT_BOTTOM)
+       call boundary_temp(t_1,yv,ttop,tbot)
+#else
        call boundary_temp(t_1,yv)
-
+#endif
+#endif
 
 #endif
 
