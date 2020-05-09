@@ -5,7 +5,6 @@ c vertical sections (at fixed z)
 
 #include "param.h"
 
-
       complex*16 u(nwax+1,2*nwaz+1,0:Nylmem+1,2)
       complex*16 t(nwax+1,2*nwaz+1,0:Nylmem+1,2)
       real*8 uo(Nx,Nz,0:Nylmem+1),umax,umin,sum
@@ -13,9 +12,8 @@ c vertical sections (at fixed z)
       real xmin,xmax
       integer istart,iend,istep,it,jmax,jmin,jj,iargc
       character*12 file0
-	character*45 file
+      character*45 file
       character cc*1,str*30
-
 
 #ifndef NOMPI 
       print *,"Please compile with the NOMPI option!"
@@ -70,31 +68,28 @@ c vertical sections (at fixed z)
          call Fourier1 (u,uo)
         endif
 
-	file=file0
-	
-	  open(unit=20,file=file,form='formatted')
-	           
-               do j=1,Ny
-	         sum=0
-                 do k=1,Nz
-                 do i=1,Nx
-	         sum=sum+ uo(i,jj,j)
-	         enddo
-	         enddo
-	         sum=sum/(Nz*Nx)
-	         sum=0
-	     if(jj.gt.0) then
-                 do i=1,Nx
-		write(20,*) uo(i,jj,j)-sum
-                 enddo
-                else
-                 do i=1,Nz
-		write(20,*) uo(-jj,i,j)-sum
-                 enddo
-		endif
-               enddo
-	close(20)
-
+        file=file0
+        open(unit=20,file=file,form='formatted')
+        do j=1,Ny
+          sum=0
+          do k=1,Nz
+            do i=1,Nx
+              sum=sum+ uo(i,jj,j)
+            enddo
+          enddo
+          sum=sum/(Nz*Nx)
+          sum=0
+          if(jj.gt.0) then
+            do i=1,Nx
+              write(20,*) uo(i,jj,j)-sum
+            enddo
+          else
+            do i=1,Nz
+              write(20,*) uo(-jj,i,j)-sum
+            enddo
+          endif
+        enddo
+        close(20)
       enddo
 
       end
