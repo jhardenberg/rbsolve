@@ -64,9 +64,9 @@ c	perturbed with white noise on all wavenumbers
       call punti (DD,ptan,qtan,yp,yv,qp,rp,sp,qv,rv,sv)
 
       do j=1,Ny
-	do i=1,nwax+1
+        do i=1,nwax+1
            do k=1,2*nwaz+1
-		t(i,k,j)=(0.d0,0.d0)
+              t(i,k,j)=(0.d0,0.d0)
            enddo
         enddo
       enddo
@@ -84,29 +84,25 @@ c     Crea lo spettro orrizontale
       enddo
 c     Crea lo spettro verticale (una gaussiana)
 
-
-
-
-
       do l=1,(Ny+1)/2
 
-         B_L(l)=(1/(sigmaL*dsqrt(pi2)))*
-     &   dexp(-0.5d0*((l-mediaL)/sigmaL)**2.d0)
+        B_L(l)=(1/(sigmaL*dsqrt(pi2)))*
+     &  dexp(-0.5d0*((l-mediaL)/sigmaL)**2.d0)
 
-         print *,l
-      do j=1,Ny
+        print *,l
+        do j=1,Ny
 
-        T_L(l)=dsin(l*pi2*yv(j))
+          T_L(l)=dsin(l*pi2*yv(j))
 
-        do i=1,nwax+1
-          do k=1,2*nwaz+1
-            rr=ran2(idum)
-            ReT=A(i,k)*dcos(rr*pi2)
-            ImT=A(i,k)*dsin(rr*pi2)
-            t(i,k,j)=t(i,k,j)+ampl*B_L(l)*dcmplx(ReT,ImT)*T_L(l)    
-         enddo
+          do i=1,nwax+1
+            do k=1,2*nwaz+1
+              rr=ran2(idum)
+              ReT=A(i,k)*dcos(rr*pi2)
+              ImT=A(i,k)*dsin(rr*pi2)
+              t(i,k,j)=t(i,k,j)+ampl*B_L(l)*dcmplx(ReT,ImT)*T_L(l)    
+            enddo
+          enddo
         enddo
-      enddo
       enddo
       do j=1,Ny
           t(1,1,j)=(yv(j)/DD+DD/2)*
@@ -115,6 +111,3 @@ c     Crea lo spettro verticale (una gaussiana)
       call savefield(t,'t',0,0.d0)
   
       end
-
-
-

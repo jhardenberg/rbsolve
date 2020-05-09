@@ -38,40 +38,23 @@ c ______________________________________________________________________
 cxxxxx  these are most probably useless!!! jh & gp 07/2002
 #ifndef FREE_SLIP_BOTTOM
       if(iam.eq.1) then 
-       do k=1,2*nwaz+1
-        do i=1,nwax+1
-         p(i,k,0)=p(i,k,1)
-        enddo
-       enddo
+         p(:,:,0)=p(:,:,1)
       endif
 #else
       if(iam.eq.1) then
-       do k=1,2*nwaz+1
-        do i=1,nwax+1
-         p(i,k,0)=p(i,k,1)
-        enddo
-       enddo
+         p(:,:,0)=p(:,:,1)
       endif
 
 #endif
 #ifndef FREE_SLIP_TOP
       if(iam.eq.NPROC) then
-       do k=1,2*nwaz+1
-        do i=1,nwax+1
-         p(i,k,Nyl)=p(i,k,Nyl-1)
-        enddo
-       enddo
+         p(:,:,Nyl)=p(:,:,Nyl-1)
       endif
 #else
       if(iam.eq.NPROC) then
-       do k=1,2*nwaz+1
-        do i=1,nwax+1
-         p(i,k,Nyl)=p(i,k,Nyl-1)
-        enddo
-       enddo
+         p(:,:,Nyl)=p(:,:,Nyl-1)
       endif
 #endif
-
 
       return
       end

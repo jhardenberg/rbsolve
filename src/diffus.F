@@ -19,21 +19,12 @@ c Calcolo il termine diffusivo
        qv1=invRe*2.d0*qv(jj)
        rv1=invRe*2.d0*rv(jj)
        sv1=invRe*2.d0*sv(jj)
-       do k=1,2*nwaz+1   
-        do i=1,nwax+1
-       Lu_n(i,k,j)=qv1*u_n(i,k,j-1)-(rv1
-     +   +invRe*K2(i,k))*u_n(i,k,j)+sv1*u_n(i,k,j+1) 
-
-*       Lu_n(i,k,j)=invRe*(2.d0*qv(jj-1)*u_n(i,k,j-1)-(2.d0*rv(jj-1)
-*     +             +K2(i,k))*u_n(i,k,j)+2.d0*sv(jj-1)*u_n(i,k,j+1))  
-        enddo
-       enddo
+       Lu_n(:,:,j)=qv1*u_n(:,:,j-1)-(rv1
+     +   +invRe*K2(:,:))*u_n(:,:,j)+sv1*u_n(:,:,j+1) 
       enddo
 
       return
       end
-      
-
 
       subroutine addrotw (u_n,v_n,ff,Lu_n,Lv_n)
 
@@ -46,21 +37,15 @@ c Calcolo il termine diffusivo
       real*8 ff
       integer jj
 
-!      print *,Lu_n(128,128,Nyl/2),ff*v_n(128,128,Nyl/2),ff
-!	stop
       do j=Nylmin,Nylmax
-       do k=1,2*nwaz+1
-        do i=1,nwax+1
-           Lu_n(i,k,j)=Lu_n(i,k,j)-ff*v_n(i,k,j)
-           Lv_n(i,k,j)=Lv_n(i,k,j)+ff*u_n(i,k,j)
-        enddo
-       enddo
+           Lu_n(:,:,j)=Lu_n(:,:,j)-ff*v_n(:,:,j)
+           Lv_n(:,:,j)=Lv_n(:,:,j)+ff*u_n(:,:,j)
       enddo 
     
       return
       end 
 
-       subroutine addrot (u_n,v_n,w_n,om_y,om_z,Lu_n,Lv_n,Lw_n)
+      subroutine addrot (u_n,v_n,w_n,om_y,om_z,Lu_n,Lv_n,Lw_n)
  
 #include "param.h"
  
@@ -74,15 +59,10 @@ c Calcolo il termine diffusivo
        integer jj
  
        do j=Nylmin,Nylmax
-        do k=1,2*nwaz+1
-         do i=1,nwax+1
-            Lu_n(i,k,j)=Lu_n(i,k,j)+om_y*w_n(i,k,j)-om_z*v_n(i,k,j)
-            Lv_n(i,k,j)=Lv_n(i,k,j)+om_z*u_n(i,k,j)
-            Lw_n(i,k,j)=Lw_n(i,k,j)-om_y*u_n(i,k,j)
-         enddo
-        enddo
+            Lu_n(:,:,j)=Lu_n(:,:,j)+om_y*w_n(:,:,j)-om_z*v_n(:,:,j)
+            Lv_n(:,:,j)=Lv_n(:,:,j)+om_z*u_n(:,:,j)
+            Lw_n(:,:,j)=Lw_n(:,:,j)-om_y*u_n(:,:,j)
        enddo 
      
        return
        end 
-
