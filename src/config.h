@@ -20,7 +20,9 @@
 
 !-#define HTROPO (1.d0)
 !* problem with lapse rate
-#define LAPSERATE
+!-#define LAPSERATE
+!* constant radiative term
+#define RADIATION
 
 !* Use also an additional field S *
 !-#define SALINITY

@@ -299,6 +299,7 @@ c Read in the parameters
       Omegay=0.d0
       Omegaz=0.d0
       lapse=100.d0
+      qrad=1.d0
 
       alfa(1)= 0.0d0
       alfa(2)=0.066666666666d0

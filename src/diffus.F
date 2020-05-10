@@ -84,3 +84,23 @@ c Calcolo il termine diffusivo
       return
       end
 #endif
+
+
+#ifdef RADIATION
+      subroutine add_radiation (Lt_n,qrad)
+
+#include "param.h"
+
+      complex*16 Lt_n(nwax+1,2*nwaz+1,0:Nyl+1)
+      real*8 qrad
+
+      do j=Nylmin,Nylmax
+       Lt_n(1,1,j)= Lt_n(1,1,j)-qrad
+      enddo
+
+      return
+      end
+#endif
+
+
+
