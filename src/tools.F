@@ -298,6 +298,7 @@ c Read in the parameters
       Le=3.d0
       Omegay=0.d0
       Omegaz=0.d0
+      lapse=100.d0
 
       alfa(1)= 0.0d0
       alfa(2)=0.066666666666d0
@@ -340,6 +341,7 @@ c Read in the parameters
           write(*,*) 'Le',Le
           write(*,*) 'Omegay',Omegay
           write(*,*) 'Omegaz',Omegaz
+          write(*,*) 'lapse',lapse
         endif
 #ifdef SALINITY
         write(*,*) 'SALT FINGERS'

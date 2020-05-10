@@ -20,6 +20,7 @@
 
 !-#define HTROPO (1.d0)
 !* problem with lapse rate
+#define LAPSERATE
 
 !* Use also an additional field S *
 !-#define SALINITY
@@ -62,7 +63,7 @@
 !-#define NOFLUXS_TOP
 
 !* Non-homogeneous Temperature boundary conditions (Dirichlet or flux)
-!-#define PATTERNT_BOTTOM
+#define PATTERNT_BOTTOM
 !-#define PATTERNT_TOP
 
 !**************************

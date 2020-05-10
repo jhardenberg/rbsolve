@@ -506,6 +506,10 @@ c Time-advancement over 3 substeps
        call diffus (t_1,TDIFF,qv,rv,sv,K2,Lt_1)
 #endif
 
+#ifdef LAPSERATE
+        call add_lapse(Lt_1,v_1,lapse)
+#endif
+
 ***   Compute advective/convective terms   ***
 
 ctime       ttot0=etime(tdat0)
