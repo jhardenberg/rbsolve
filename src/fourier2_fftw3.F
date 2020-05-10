@@ -73,18 +73,63 @@ c -   C_(Nz-k)  (k=1,nwaz) -
 
       end do
 
-
 c      enddo
 c       tglob1=etime(gdat1)
 c       print *,'TOTAL (',iam,'): t:',tglob1-tglob0,
 c     &                         ' u:',gdat1(1)-gdat0(1),
 c     &                         ' s:',gdat1(2)-gdat0(2)
-
-
             
       return
       end
 
+
+      subroutine FOURIER2_FFTW_SINGLE2D (uo,uv)
+      
+#include "param.h"  
+#include "fftw3.h"  
+         
+      integer*4  ik2 , nw2,ik1
+      real*8 uo(Nx,Nz)
+      complex*16 uv(nwax+1,2*nwaz+1)
+      real*8 scale
+      real*8 ain(Nx,Nz)
+      complex*16 aout(Nx/2+1,Nz)
+      common/FFTW3/ain,aout	
+
+      real*8 Kmask(nwax+1,nwaz*2+1)
+      common/ALIASMASK/Kmask
+
+*     The FFTW transforms are not normalized ! fix this
+      scale=1./(Nx*Nz)
+
+      do k=1,Nz
+        do i=1,Nx
+          ain(i,k)=uo(i,k)
+        end do
+      end do
+
+      call REAL_TO_COMPLEX(f_plan)
+
+c -  C_k  (k=0, k=1,nwaz) -
+      do k=1,nwaz+1 
+        do i=1,nwax+1
+          uv(i,k)=aout(i,k)*Kmask(i,k)
+        end do
+      end do
+      
+c -   C_(Nz-k)  (k=1,nwaz) -
+      nw2=2*nwaz+2
+
+      do k=1,nwaz
+        ik2=Nz-(k-1)
+        ik1=nw2-k
+        do i=1,nwax+1
+            uv(i,ik1)=aout(i,ik2)*Kmask(i,ik1)
+        end do
+      end do
+
+      return
+      end
 
 #endif
 

@@ -134,6 +134,3 @@ c Slooow variant for long runs
       return
 
       end
-
-
-

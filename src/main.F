@@ -195,6 +195,13 @@ cmpi      call MPI_FINALIZE(ierr)
       integer it1
       parameter (it1=4)
 
+#if defined (PATTERNT_TOP)  || defined (PATTERNT_BOTTOM)
+      complex*16 ttop(nwax+1,2*nwaz+1)
+      complex*16 tbot(nwax+1,2*nwaz+1)
+      real*8 ttopo(Nx,Nz)
+      real*8 tboto(Nx,Nz)
+#endif
+
       complex*16 t_2(nwax+1,2*nwaz+1,0:Nylmem+1)
       complex*16 Lt(nwax+1,2*nwaz+1,0:Nylmem+1,2)
       complex*16 Nt(nwax+1,2*nwaz+1,0:Nylmem+1,2)
@@ -258,8 +265,6 @@ cmpi      call MPI_FINALIZE(ierr)
       integer idum
       real*8 ran2,rtime
 
-	
-
       ilu1=1
       ilu2=2
 
@@ -301,16 +306,12 @@ c-#define READINIFILE
       close(10) 
 #else
 *     Reads formatted temperature from fort.9
-      do i=1,nwax+1
-       do k=1,2*nwaz+1
         do j=0,Ny+1
-          u(i,k,j,it1)=(0.0,0.0)
-          u(i,k,j,iu1)=(0.0,0.0)
-          u(i,k,j,iv1)=(0.0,0.0)
-          u(i,k,j,iw1)=(0.0,0.0)
+          u(:,:,j,it1)=(0.0,0.0)
+          u(:,:,j,iu1)=(0.0,0.0)
+          u(:,:,j,iv1)=(0.0,0.0)
+          u(:,:,j,iw1)=(0.0,0.0)
         enddo
-       enddo
-      enddo
 *
 c      open(12,file='u.50',form='unformatted',status='unknown')
 c      open(13,file='v.50',form='unformatted',status='unknown')
@@ -361,6 +362,21 @@ c     reads the old (antonio et al) format, works only on single cpu ....
 #endif
       endif
 
+#ifdef TEMPERATURE
+#ifdef PATTERNT_TOP
+      open(unit=10,file='temperature_top.dat')
+      read(10,*) ((ttopo(i,k),i=1,Nx),k=1,Nz) 
+      close(10)
+      call Fourier2_single2d(ttopo,ttop)
+#endif
+#ifdef PATTERNT_BOTTOM
+      open(unit=10,file='temperature_bottom.dat')
+      read(10,*) ((tboto(i,k),i=1,Nx),k=1,Nz) 
+      close(10)
+      call Fourier2_single2d(tboto,tbot)
+#endif
+#endif
+
 c Controllo le condizioni iniziali di T
 
 c	Diagnostics
@@ -408,8 +424,6 @@ c These are not dependent on the wave number
       call tridlhs(D,E,F,reda,redb,redc,xlh,xuh,
      +             uo,vo,Nylmax1,NX,NPROC,iam)
  
-
-
 c Mean pressure gradient
 c      tauw=2.d0*invRe  (for laminar flow only with center velocity)
 c  for turbulent flow with friction velocity:
@@ -420,14 +434,17 @@ c  for turbulent flow with friction velocity:
        call boundary(u_1,v_1,w_1)
 
 #ifdef TEMPERATURE
+#if defined (PATTERNT_TOP)  || defined (PATTERNT_BOTTOM)
+       call boundary_temp(t_1,yv,ttop,tbot)
+#else
        call boundary_temp(t_1,yv)
+#endif
 #endif
 #ifdef SALINITY
        call boundary_scalar(s_1,yv)
 #endif
 
 ****   Exchange velocities between domains   ***
-
 
        call mpighost(u_1)
 
@@ -446,7 +463,6 @@ ctime       ttot0=etime(tdat0)
        call Fourier1 (u_1,uo) 
        call Fourier1 (v_1,vo) 
        call Fourier1 (w_1,wo)
-	
        call check_CFL(uo,vo,wo,itime,dx,dz,yv,dt,rtime)
 
 #ifdef JOST
@@ -632,8 +648,13 @@ ctime     &              ' s:',tdat(2)-tdat0(2)
      +    Nt_1,Nt_2,
      +    alfa,beta,gamma,zeta,l,t_1)
 
+#ifdef TEMPERATURE
+#if defined (PATTERNT_TOP)  || defined (PATTERNT_BOTTOM)
+       call boundary_temp(t_1,yv,ttop,tbot)
+#else
        call boundary_temp(t_1,yv)
-
+#endif
+#endif
 
 #endif
 
@@ -947,13 +968,9 @@ cmpi        include 'mpif.h'
       if(isend(iam).eq.-1) then
 *     we want to send a level below
          do l=1,5,2
-         do j=1,Nyl
-         do k=1,2*nwaz+1
-         do i=1,nwax+1
-            uu(i,k,j,l)=uu(i,k,j+1,l)
-         enddo
-         enddo
-         enddo
+          do j=1,Nyl
+            uu(:,:j,l)=uu(:,:,j+1,l)
+          enddo
          enddo
          Nyl=Nyl-1
       endif
@@ -964,13 +981,9 @@ cmpi        include 'mpif.h'
       if(isend(iam-1).eq.1) then
 *     we should get the level from below
          do l=1,5,2
-         do j=Nyl,0,-1
-         do k=1,2*nwaz+1
-         do i=1,nwax+1
-            uu(i,k,j+1,l)=uu(i,k,j,l)
-         enddo
-         enddo
-         enddo
+          do j=Nyl,0,-1
+            uu(:,:,j+1,l)=uu(:,:,j,l)
+          enddo
          enddo
          Nyl=Nyl+1
       endif
@@ -987,7 +1000,7 @@ cmpi        include 'mpif.h'
         
       Nybase=0
       do i=1,iam-1
-	   Nybase=Nybase+Nyls(i)
+         Nybase=Nybase+Nyls(i)
       enddo
 
       Nylmax=Nyl
@@ -1042,14 +1055,10 @@ cmpi      include 'mpif.h'
       al(1)=1
       al(2)=1
       al(3)=1
-      do i=1,nwax+1
-       do k=1,2*nwaz+1
-        do j=0,Nyl+1
-         u(i,k,j)=(2.d0,1.d0)
-         Lu1(i,k,j)=(1.d0,2.d0)
-         Lu2(i,k,j)=(2.d0,1.d0)
-        end do
-       end do
+      do j=0,Nyl+1
+         u(:,:,j)=(2.d0,1.d0)
+         Lu1(:,:,j)=(1.d0,2.d0)
+         Lu2(:,:,j)=(2.d0,1.d0)
       end do
 
       if(iam.eq.1) print *,'Testing CPU weights'
@@ -1066,7 +1075,6 @@ ctime      ttot1=etime(tdat)
       utot=tdat(1)-tdat0(1)
       call rgather(utot,utime)
 
-c      if(iam.eq.2) then
          open(unit=11,file='cpuweights')
          utot=1e6
          do i=1,NPROC
@@ -1074,13 +1082,11 @@ c      if(iam.eq.2) then
          enddo
          do i=1,NPROC
 
-      if (iam.eq.1) 
+            if (iam.eq.1) 
      + print *,'CPU(',i,'): estimated cpu weight=',utot/utime(i)*1000
             write(11,*) utot/utime(i)*1000
          enddo
-         close(11)
-c      endif
-
+      close(11)
 
       end
 #endif

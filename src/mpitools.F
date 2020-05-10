@@ -96,7 +96,6 @@ cmpi        include 'mpif.h'
         end
 
 
-
         subroutine mpighostdown(ff)
 *     Exchanges  ghost boundary conditions 
 *     Uses the new datatype myMPI_VEL_TYPE
@@ -142,7 +141,6 @@ cmpi        include 'mpif.h'
         end
 
 
-
       subroutine rgatherroot(value,array)
 #include "param.h"
 cmpi        include 'mpif.h'
@@ -161,8 +159,6 @@ cmpi        include 'mpif.h'
       end
 
 
-
-
       subroutine rgather(value,array)
 #include "param.h"
 cmpi        include 'mpif.h'
@@ -178,7 +174,6 @@ cmpi        include 'mpif.h'
       end
 
 
-
       subroutine rbroadcast(value,iroot)
 * Broadcasts a real value from root
 #include "param.h"
@@ -191,10 +186,3 @@ cmpi        include 'mpif.h'
 #endif
       endif
       end
-
-
-
-
-
-
-        

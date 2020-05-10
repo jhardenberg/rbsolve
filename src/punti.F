@@ -48,8 +48,6 @@ c does not create the lower BL stretching
          yp(j)=(yv(j)+yv(j+1))/2.d0
       end do
 
-
-
       do j=1,Ny
        qp(j)=1.d0/((yp(j+1)-yp(j-1))*(yp(j)-yp(j-1)))
        rp(j)=1.d0/((yp(j+1)-yp(j))*(yp(j)-yp(j-1)))
@@ -62,7 +60,6 @@ c does not create the lower BL stretching
        sv(j)=1.d0/((yv(j+1)-yv(j-1))*(yv(j+1)-yv(j)))
       end do
       
-      
       open (13,file='coord')
 
       do j=0,Ny+1
@@ -74,14 +71,8 @@ c does not create the lower BL stretching
 
       close(13)
       
-
-
-      
       return 
       end
-
- 
-
 
 
       subroutine stretch (yv,nn,ymin,ymax,yeqmin,yeqmax,qtan,ptan)
@@ -90,7 +81,6 @@ c does not create the lower BL stretching
       integer nn
       real*8 yv(nn),yeq(nn),ymax,ymin,yeqmin,yeqmax
       real*8 ptan,qtan,dyeq,yv1,yvn
-      
 
       dyeq=(yeqmax-yeqmin)/dfloat(nn-1)
      
@@ -117,7 +107,6 @@ c does not create the lower BL stretching
       endif
 #endif
   
-    
       yv1=yv(1)
       do j=1,nn
          yv(j)=yv(j)-yv1
@@ -129,9 +118,6 @@ c does not create the lower BL stretching
       end do
       
       print *,yv(1),yv(2),yv(nn-1),yv(nn)
-  
 
       return 
       end
-
- 

@@ -80,7 +80,6 @@ c     Convective terms: sum of the double products
       
       return
       end
-
       
 
       subroutine conv_scalar (uo,vo,wo,to,yv,mm,nn,Nt_n,ut,vt,wt)
@@ -133,4 +132,3 @@ c     Convective terms: sum of the double products
 
       return
       end
-

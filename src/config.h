@@ -1,4 +1,4 @@
-!-#define ONLY2D
+#define ONLY2D
 !* This version of the code has an active scalar S */
 !* if used for salt fingers define Rt,Rs,Le,Pr (Ra is not used) */
 !**********************************
@@ -60,6 +60,10 @@
 !-#define NOFLUXS_BOTTOM
 !-#define FLUXS_TOP (1.d0)
 !-#define NOFLUXS_TOP
+
+!* Non-homogeneous Temperature boundary conditions (Dirichlet or flux)
+#define PATTERNT_BOTTOM
+#define PATTERNT_TOP
 
 !**************************
 !* Technical code options *
@@ -145,10 +149,12 @@
 #define INITFOUR_FFTW initfour
 #define FOURIER1_FFTW fourier1
 #define FOURIER2_FFTW fourier2
+#define FOURIER2_FFTW_SINGLE2D fourier2_single2d
 #else
 #define INITFOUR_TMPT initfour
 #define FOURIER1_TMPT fourier1
 #define FOURIER2_TMPT fourier2
+#define FOURIER2_TMPT_SINGLE2D fourier2_single2d
 #endif
 
 

@@ -28,8 +28,8 @@ c     We impose p(1,1,Np)=0 to avoid singularity of the Helmholtz prooblem
       if(iam.eq.NPROC) then
          D(1,1,Nyl-1)=0.d0
 cxxx  This assumes that > 1 slice is assigned to each CPU!
-c         F(1,1,Nyl-2)=0.d0
-c       JOST11 commented this!
+c       F(1,1,Nyl-2)=0.d0
+c       JH11 commented this!
       endif
       return
       end

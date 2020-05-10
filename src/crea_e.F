@@ -8,27 +8,15 @@ c ______________________________________________________________________
       real*8 K2(nwax+1,2*nwaz+1),E(nwax+1,2*nwaz+1,Nyl)
       real*8 qp(Ny),rp(Ny),sp(Ny)
       
-      do k=1,2*nwaz+1
-       do i=1,nwax+1
-        do j=1,Nylmax1
-	  E(i,k,j)=-(K2(i,k)+2.d0*rp(j+Nybase))
-        enddo
-       enddo
+      do j=1,Nylmax1
+         E(:,:,j)=-(K2(:,:)+2.d0*rp(j+Nybase))
       enddo
 
       if(iam.eq.1) then
-      do k=1,2*nwaz+1
-       do i=1,nwax+1
-        E(i,k,1)=E(i,k,1)+2.d0*qp(1)
-       enddo
-      enddo
+        E(:,:,1)=E(:,:,1)+2.d0*qp(1)
       endif
       if (iam.eq.NPROC) then
-       do k=1,2*nwaz+1
-        do i=1,nwax+1
-         E(i,k,Nyl-1)=E(i,k,Nyl-1)+2.d0*sp(Ny-1)
-        enddo
-       enddo
+         E(:,:,Nyl-1)=E(:,:,Nyl-1)+2.d0*sp(Ny-1)
       endif
 c     The famous pressure fix! GP& JH 07/2002
 c     We impose p(1,1,Np)=0 to avoid singularity of the Helmholtz prooblem

@@ -23,7 +23,6 @@ c **********************************************************************
       return
       end
 
-
       subroutine salvatotv (ut,inum)
 #include "param.h"
       real*8 ut(Nx,Nz,0:Nyl+1)
@@ -33,7 +32,6 @@ c **********************************************************************
       do j=1,Nyl
              do i=1,Nx
                 a1(i,j)=ut(i,k,j)
-c             write(inum,'(e16.7)')  ut(i,k,j)
              enddo
       enddo
       write(inum) a1
@@ -50,7 +48,6 @@ c             write(inum,'(e16.7)')  ut(i,k,j)
             a1(i,k)= ut(i,k,10) 
             a2(i,k)= ut(i,k,65) 
             a3(i,k)= ut(i,k,120) 
-c      write(inum,'(3e16.7)')  ut(i,k,10),ut(i,k,120),ut(i,k,65)
           enddo
       enddo
       write(inum)  a1
@@ -58,8 +55,6 @@ c      write(inum,'(3e16.7)')  ut(i,k,10),ut(i,k,120),ut(i,k,65)
       write(inum)  a3
       return
       end
-
- 
 
       subroutine salvatot (ut,vt,wt,inum)
       
@@ -356,20 +351,16 @@ c Read in coefficients for RK3
       kxmin=2.d0*kcx/dfloat(Nx)
       kzmin=2.d0*kcz/dfloat(Nz)
 
-	if(idisp.eq.1) then
+      if(idisp.eq.1) then
 c Write stuff to file
-
-      open(12,file='tanh.par')
-      write(12,*) 'ptan=',ptan,' ','qtan=',qtan
-      write(12,*) 'Ny=',Ny,' ','Nx=',Nx,' ','Nz=',Nz
-      write(12,*) 'Re=',Re,' ','Lx=',Lx,' ','Lz=',Lz
-      write(12,*) 'dt=',dt,' ','ttot=',ttot,' ','nsave=',nsave
-      write(12,*) 'dx=',dx,' ','dz=',dz
-      close(12)
-	endif
-
-
-
+        open(12,file='tanh.par')
+        write(12,*) 'ptan=',ptan,' ','qtan=',qtan
+        write(12,*) 'Ny=',Ny,' ','Nx=',Nx,' ','Nz=',Nz
+        write(12,*) 'Re=',Re,' ','Lx=',Lx,' ','Lz=',Lz
+        write(12,*) 'dt=',dt,' ','ttot=',ttot,' ','nsave=',nsave
+        write(12,*) 'dx=',dx,' ','dz=',dz
+        close(12)
+      endif
 
       end
 
@@ -410,8 +401,3 @@ c Computation of wave vector arrays
       end do
 
       end
-
-
-
-
-
