@@ -9,3 +9,7 @@
       common/ALLPARA/ptan,qtan,DD,Re,Lx,Lz,invRe,dt,dx,dz,
      +   kxmin,kzmin,nsave,ttot,alfa,beta,gamma,zeta,Ra,Kscalar,Pr,
      +   Rt,Rs,Le,Omegay,Omegaz
+
+      namelist /grid/ptan,qtan,Lx,Lz,DD
+      namelist /simulation/dt,ttot,nsave
+      namelist /phys/Ra,Re,Pr,Kscalar,Rt,Rs,Le,Omegay,Omegaz

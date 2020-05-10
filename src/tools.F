@@ -266,7 +266,106 @@ cmpi        include 'mpif.h'
 
       end
 
+#ifdef NAMELIST_PARAMS
+      subroutine read_para(idisp)
 
+c Read in the parameters
+#include "param.h"
+#include "allpara.h"
+
+      real*8 kcx,kcz
+      integer*4 idisp
+
+      real*8 pi2,pi
+      parameter (pi2=6.28318530717959d0)
+
+      pi=pi2/2
+
+      ptan=1.7
+      qtan=1.5
+      Re=300.d0
+      DD=1.d0
+      Lx=pi2
+      Lz=pi2
+      dt=1e-6
+      ttot=50000
+      nsave=500
+      Ra=1e7
+      Pr=0.71d0
+      Kscalar=1.d0
+      Rt=1.025e7
+      Rs=1e7
+      Le=3.d0
+      Omegay=0.d0
+      Omegaz=0.d0
+
+      open(11,file='param_namelist')
+      read (11, grid)
+      read (11, simulation)
+      read (11, phys)
+      close (11)
+
+      invRe=1.d0/Re
+
+      if(idisp.eq.1) then
+        if(iam.eq.1) then
+          write(*,*) 'Nx=',Nx
+          write(*,*) 'Ny=',Ny
+          write(*,*) 'Nz=',Nz
+          write (*,*) 'ptan=',ptan
+          write (*,*) 'qtan=',qtan
+          write(*,*) 'DD=',DD
+          write(*,*) 'Lx=',Lx
+          write(*,*) 'Lz=',Lz
+          write(*,*) 'dt=',dt
+          write(*,*) 'ttot=',ttot
+          write(*,*) 'nsave=',nsave
+          write(*,*) 'Reynolds =', Re
+          write(*,*) 'Rayleigh =',Ra
+          write(*,*) 'Prandtl  =',Pr
+          write(*,*) 'Rt',Rt
+          write(*,*) 'Rs',Rs
+          write(*,*) 'Le',Le
+          write(*,*) 'Omegay',Omegay
+          write(*,*) 'Omegaz',Omegaz
+        endif
+#ifdef SALINITY
+        write(*,*) 'SALT FINGERS'
+#endif
+      endif
+
+c Read in coefficients for RK3
+
+      open(12,file='param1')
+      do k=1,3
+       read(12,*) alfa(k)
+       read(12,*) beta(k)
+       read(12,*) gamma(k)
+       read(12,*) zeta(k)
+      end do
+      close(12)
+
+      dx=Lx/dfloat(Nx)
+      dz=Lz/dfloat(Nz)
+
+      kcx=pi/dx
+      kcz=pi/dz
+      kxmin=2.d0*kcx/dfloat(Nx)
+      kzmin=2.d0*kcz/dfloat(Nz)
+
+      if(idisp.eq.1) then
+c Write stuff to file
+        open(12,file='tanh.par')
+        write(12,*) 'ptan=',ptan,' ','qtan=',qtan
+        write(12,*) 'Ny=',Ny,' ','Nx=',Nx,' ','Nz=',Nz
+        write(12,*) 'Re=',Re,' ','Lx=',Lx,' ','Lz=',Lz
+        write(12,*) 'dt=',dt,' ','ttot=',ttot,' ','nsave=',nsave
+        write(12,*) 'dx=',dx,' ','dz=',dz
+        close(12)
+      endif
+
+      end
+#else
       subroutine read_para(idisp)
 
 c Read in the parameters
@@ -363,6 +462,8 @@ c Write stuff to file
       endif
 
       end
+#endif
+
 
       subroutine crea_wave(kxm,kzm,K2,mm,nn,kxmin,kzmin)
 #include "param.h"

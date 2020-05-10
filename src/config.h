@@ -69,6 +69,9 @@
 !* Technical code options *
 !*************************
 
+!* Read params from standard namelist or from old format (param0, param1)
+#define NAMELIST_PARAMS
+
 !* Do you want a scalar version w/out MPI? uncomment this!  *
 ! Actually not needed anymore ... ignore #define NOMPI
 
