@@ -18,11 +18,13 @@
 !* Convective code *
 #define TEMPERATURE
 
+!* Prandtl scaling *
+!*#define PRANDTL
 !-#define HTROPO (1.d0)
 !* problem with lapse rate
 !-#define LAPSERATE
 !* constant radiative term
-#define RADIATION
+!*#define RADIATION
 
 !* Use also an additional field S *
 !-#define SALINITY
@@ -116,12 +118,17 @@
 
 #ifdef FINGER
 !* Salt fingers
-
 #define VDIFF (Pr*Le)
 #define BUOYT (+Pr*Le*Rt)
 #define BUOYS (-Pr*Le*Rs)
 #define TDIFF Le
 #define SDIFF (1.d0)
+
+#elif defined(PRANDTL)
+!* Prandtl
+#define VDIFF (invRe)
+#define BUOYT (1.d0)
+#define TDIFF (invRe/Pr)
 
 #else
 !* Rayleigh-Benard
