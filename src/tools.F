@@ -299,9 +299,21 @@ c Read in the parameters
       Omegay=0.d0
       Omegaz=0.d0
 
+      alfa(1)= 0.0d0
+      alfa(2)=0.066666666666d0
+      alfa(3)=0.166666666666d0
+      beta(1)=0.533333333333d0
+      beta(2)=0.066666666666d0
+      beta(3)=0.166666666666d0
+      gamma(1)=0.533333333333d0
+      gamma(2)=0.416666666666d0
+      gamma(3)=0.75d0
+      zeta(1)=0.d0
+      zeta(2)=-0.28333333333d0
+      zeta(3)=-0.41666666666d0
+
       open(11,file='param_namelist')
-      read (11, grid)
-      read (11, simulation)
+      read (11, numeric)
       read (11, phys)
       close (11)
 
@@ -333,17 +345,6 @@ c Read in the parameters
         write(*,*) 'SALT FINGERS'
 #endif
       endif
-
-c Read in coefficients for RK3
-
-      open(12,file='param1')
-      do k=1,3
-       read(12,*) alfa(k)
-       read(12,*) beta(k)
-       read(12,*) gamma(k)
-       read(12,*) zeta(k)
-      end do
-      close(12)
 
       dx=Lx/dfloat(Nx)
       dz=Lz/dfloat(Nz)

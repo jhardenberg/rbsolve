@@ -10,6 +10,5 @@
      +   kxmin,kzmin,nsave,ttot,alfa,beta,gamma,zeta,Ra,Kscalar,Pr,
      +   Rt,Rs,Le,Omegay,Omegaz
 
-      namelist /grid/ptan,qtan,Lx,Lz,DD
-      namelist /simulation/dt,ttot,nsave
-      namelist /phys/Ra,Re,Pr,Kscalar,Rt,Rs,Le,Omegay,Omegaz
+      namelist /numeric/ptan,qtan,dt,ttot,nsave,alfa,beta,gamma,zeta
+      namelist /phys/Lx,Lz,DD,Ra,Re,Pr,Kscalar,Rt,Rs,Le,Omegay,Omegaz
