@@ -85,20 +85,20 @@ We recently changed the configuration file to a standard Fortran namelist. It is
 Set up  the file param_namelist with all the physical parameters for the experiment (this is only a subset of the possible parameters):
 
     &NUMERIC
-      dt=1e-6     # Timestep
-      ttot=50000  # Total number of steps
-      nsave=250   # How often to save
+      dt=1e-6     ! Timestep
+      ttot=50000  ! Total number of steps
+      nsave=250   ! How often to save
     &END
 
     &PHYS
-      Lx=6.28318530717958   # Domain length
-      Lz=6.28318530717958   # Domain width
-      Ra=1e7                # Rayleigh number
-      Pr=0.71d0             # Prandtl number
-      Omegay=0.d0           # Rotation component y direction
-      Omegaz=0.d0           # rotation component z direction
-      lapse=0.d0            # Lapse rate
-      Re=300.d0             # Reynolds number
+      Lx=6.28318530717958   ! Domain length
+      Lz=6.28318530717958   ! Domain width
+      Ra=1e7                ! Rayleigh number
+      Pr=0.71d0             ! Prandtl number
+      Omegay=0.d0           ! Rotation component y direction
+      Omegaz=0.d0           ! rotation component z direction
+      lapse=0.d0            ! Lapse rate
+      Re=300.d0             ! Reynolds number
     &END
 
 Not all parameters are used for all configurations. For example `lapse`and `Re` are ignored for the standard Rayleigh-Bénard problem.
