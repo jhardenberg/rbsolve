@@ -91,9 +91,11 @@ c     Crea lo spettro verticale (una gaussiana)
 
         print *,l
         do j=1,Ny
-
-          T_L(l)=dsin(l*pi2*yv(j))
-
+#ifndef PRANDTL
+        T_L(l)=dsin(l*pi2*yv(j))
+#else
+        T_L(l)=1
+#endif
           do i=1,nwax+1
             do k=1,2*nwaz+1
               rr=ran2(idum)
@@ -104,10 +106,27 @@ c     Crea lo spettro verticale (una gaussiana)
           enddo
         enddo
       enddo
+#ifndef PRANDTL
       do j=1,Ny
           t(1,1,j)=(yv(j)/DD+DD/2)*
-     & (TEMPERATURE_TOP-TEMPERATURE_BOTTOM)+TEMPERATURE_BOTTOM      
+     & (TEMPERATURE_TOP-TEMPERATURE_BOTTOM)+TEMPERATURE_BOTTOM
       enddo
+#else
+c     divido il profilo di T per troposfera e  stratosfera     
+#ifdef HTROPO
+      do j=1,Ntropo
+          t(1,1,j)=(0.5*(Pr*Re)*yv(j)**2)-FLUXT_BOTTOM*yv(j)+1
+      enddo
+      do j=Ntropo+1,Ny
+          t(1,1,j)=t(1,1,Ntropo)
+      enddo
+#else
+      do j=1,Ny
+          print *,yv(j)
+          t(1,1,j)=(0.5*(Pr*Re)*(yv(j)+0.5)**2)-FLUXT_BOTTOM*(yv(j)+0.5)
+      enddo
+#endif
+#endif
       call savefield(t,'t',0,0.d0)
   
       end
