@@ -127,6 +127,9 @@ It's highly recommended to create a separate 'run' directory and to copy there t
 You can create initial conditions with the tool `inicond` which will create a randomly perturbed (on T) linear conductive solution. 
 This will create initial files for t,u,v,w and a nrec.d file (containing the number 0).
 The file `nrec.d` contains always the timestep of the latest save. When the code starts it checks for this file and restarts from the timestep it indicates.
+Launch the code with
+
+    mpirun -n 4 ./rb
 
 ## Tools ##
 
@@ -152,14 +155,11 @@ Usage example: `./spectrumh u 50 4000` (component=u, y=50, step=4000)
 
 _nusselt_ : computes the nusselt number  Nu = 1 + <wT> to estimates heat flux.
 
-Usage example: `./nusselt 2000` (nusselt step=2000)
+Usage example: `./nusselt 2000` (Nusselt step=2000)
 
 _cfl_ : computes the CFL number in the selected range. 
 
 Usage: `./cfl 2000 3000 40 `
-
-To compile, if not already there, copy the relevant source .F file in the same directory as the Makefile. 
-Tools have to be compiled necessarily BEFORE the compilation of the code (see out-of-the-box examples).
 
 ## Usage examples ##
 
@@ -177,14 +177,14 @@ Edit Makefile and leave active the line "NOMPI = 1"
     make sectionv
     make prof
 
-2. Compile and run the code:
+2. Compile, create initial conditions and run the code:
 
   Edit Makefile and comment out the line "NOMPI = 1"
 
     make clean
     make
     ./inicond
-    mpiexec -n 8 ./rb
+    mpirun -n 4 ./rb
 
 3. Make a vertical profile (at time 2000):
 
