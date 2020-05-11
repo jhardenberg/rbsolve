@@ -288,7 +288,7 @@ c Read in the parameters
       Lx=pi2
       Lz=pi2
       dt=1e-6
-      ttot=50000
+      ndt=50000
       nsave=500
       Ra=1e7
       Pr=0.71d0
@@ -331,7 +331,7 @@ c Read in the parameters
           write(*,*) 'Lx=',Lx
           write(*,*) 'Lz=',Lz
           write(*,*) 'dt=',dt
-          write(*,*) 'ttot=',ttot
+          write(*,*) 'ndt=',ndt
           write(*,*) 'nsave=',nsave
           write(*,*) 'Reynolds =', Re
           write(*,*) 'Rayleigh =',Ra
@@ -362,7 +362,7 @@ c Write stuff to file
         write(12,*) 'ptan=',ptan,' ','qtan=',qtan
         write(12,*) 'Ny=',Ny,' ','Nx=',Nx,' ','Nz=',Nz
         write(12,*) 'Re=',Re,' ','Lx=',Lx,' ','Lz=',Lz
-        write(12,*) 'dt=',dt,' ','ttot=',ttot,' ','nsave=',nsave
+        write(12,*) 'dt=',dt,' ','ndt=',ndt,' ','nsave=',nsave
         write(12,*) 'dx=',dx,' ','dz=',dz
         close(12)
       endif
@@ -394,7 +394,7 @@ c Read in the parameters
       read(11,*)  Lx
       read (11,*) Lz
       read (11,*) dt
-      read (11,*) ttot
+      read (11,*) ndt
       read (11,*) nsave
       read (11,*)  Ra
       read (11,*)  Pr
@@ -411,15 +411,15 @@ c Read in the parameters
       if(iam.eq.1) then
       write (*,*) 'ptan=',ptan
       write (*,*) 'qtan=',qtan
-      write(*,*)'Reynolds =', Re
-      write(*,*)'Rayleigh =',Ra
-      write(*,*)'Prandtl  =',Pr
-      write(*,*)'DD=',DD
-      write(*,*)'Lx=',Lx
-      write(*,*)'Lz=',Lz
-      write(*,*)'dt=',dt
-      write(*,*)'ttot=',ttot
-      write(*,*)'nsave=',nsave
+      write(*,*) 'Reynolds =', Re
+      write(*,*) 'Rayleigh =',Ra
+      write(*,*) 'Prandtl  =',Pr
+      write(*,*) 'DD=',DD
+      write(*,*) 'Lx=',Lx
+      write(*,*) 'Lz=',Lz
+      write(*,*) 'dt=',dt
+      write(*,*) 'ndt=',ndt
+      write(*,*) 'nsave=',nsave
       write(*,*) 'Ny=',Ny
       write(*,*) 'Rt',Rt
       write(*,*) 'Rs',Rs
@@ -458,7 +458,7 @@ c Write stuff to file
         write(12,*) 'ptan=',ptan,' ','qtan=',qtan
         write(12,*) 'Ny=',Ny,' ','Nx=',Nx,' ','Nz=',Nz
         write(12,*) 'Re=',Re,' ','Lx=',Lx,' ','Lz=',Lz
-        write(12,*) 'dt=',dt,' ','ttot=',ttot,' ','nsave=',nsave
+        write(12,*) 'dt=',dt,' ','ndt=',ndt,' ','nsave=',nsave
         write(12,*) 'dx=',dx,' ','dz=',dz
         close(12)
       endif

@@ -402,7 +402,7 @@ c	Diagnostics
 c Read in parameters from files
 
       call read_para(1)
-      ttot=ttot+itime
+      ndt=ndt+itime
 c Computation of wave vector arrays 
 
       call Crea_wave(kxm,kzm,K2,mm,nn,kxmin,kzmin)
@@ -486,7 +486,7 @@ ctime      tglob0=etime(gdat0)
 
 
 	idbg=0
-      do while(itime.le.ttot) 
+      do while(itime.le.ndt) 
 
 c      if(iam.eq.1) print *,' t=',itime
 
