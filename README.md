@@ -102,7 +102,7 @@ Set up  the file param_namelist with all the physical parameters for the experim
       Re=300.d0             # Reynolds number
     &END
 
-Not all paramters are used for all configurations. For example `lapse`and `Re` are ignored for the standard Rayleigh-Bénard problem.
+Not all parameters are used for all configurations. For example `lapse`and `Re` are ignored for the standard Rayleigh-Bénard problem.
 
 ## Compiling ##
 
