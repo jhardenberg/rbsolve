@@ -1,26 +1,25 @@
 &NUMERIC
-      ptan=1.7
-      qtan=1.5
-      dt=1e-6
-      ttot=50000
-      nsave=250
-      alfa=0.0d0,0.066666666666d0,0.166666666666d0
+      ptan=1.7    ! Geometric grid stretching factor
+      qtan=1.5    ! Geometric grid stretching factor
+      dt=1e-6     ! Timestep 
+      ttot=50000  ! Total number of steps to run
+      nsave=250   ! Ho often to save in steps
+      alfa=0.0d0,0.066666666666d0,0.166666666666d0             ! Timestepping coefficients 
       beta=1.533333333333d0,0.066666666666d0,0.166666666666d0
       gamma=0.533333333333d0,0.416666666666d0,0.75d0
       zeta=0.d0,-0.28333333333d0,-0.41666666666d0
 &END
 
 &PHYS
-      DD=1.d0
-      Lx=6.28318530717958
-      Lz=6.28318530717958
-      Re=300.d0
-      Ra=1e7
-      Pr=0.71d0
-      Kscalar=1.d0
-      Rt=1.025e7
-      Rs=1e7
-      Le=3.d0
-      Omegay=0.d0
-      Omegaz=0.d0
+      DD=1.d0                 ! Vertical domain extension
+      Lx=6.28318530717958     ! Domain size in X
+      Lz=6.28318530717958     ! Domain size in Z
+      Re=300.d0               ! Reynolds number (Prandtl, NS)
+      Ra=1e7                  ! Rayleigh number (RB)
+      Pr=0.71d0               ! Prandtl number
+      Rt=1.025e7              ! Thermal Rayleigh number (FINGER)
+      Rs=1e7                  ! Haline Rayleigh number (FINGER)
+      Le=3.d0                 ! Lewis number (FINGER)
+      Omegay=0.d0             ! Rotation component y direction
+      Omegaz=0.d0             ! Rotation component z direction
 &END
