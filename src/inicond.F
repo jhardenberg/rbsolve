@@ -18,15 +18,7 @@ c	perturbed with white noise on all wavenumbers
 
       character cc*1,str*30
 
-      real*8 ptan,qtan,ran2
-      real*8 DD,Lx,Lz,Re,invRe,dt,dx,dz
-      real*8 kxmin,kzmin,Ra,Kscalar,Pr
-
-      integer*4 nsave,ttot
-      real*8 alfa(3),beta(3),gamma(3),zeta(3)
-
-      common/ALLPARA/ptan,qtan,DD,Re,Lx,Lz,invRe,dt,dx,dz,
-     +   kxmin,kzmin,nsave,ttot,alfa,beta,gamma,zeta,Ra,Kscalar,Pr
+#include "allpara.h"
 
       real*8 A(nwax+1,2*nwaz+1)
       real*8 kxm(nwax+1),kzm(2*nwaz+1)
@@ -34,7 +26,7 @@ c	perturbed with white noise on all wavenumbers
       real*8 K2(nwax+1,2*nwaz+1)
 
       integer ik,idum,l
-      real*8 b,c,K0,sigmaL,mediaL
+      real*8 b,c,K0,sigmaL,mediaL,ran2
       real*8 T_L((Ny+1)/2),B_L((Ny+1)/2),rr,ReT,ImT,ampl
       real*8 pi2
       parameter (pi2=6.28318530717959d0)
