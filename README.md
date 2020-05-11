@@ -1,12 +1,10 @@
 # RBsolve
 ## Pseudospectral Rayleigh-Bénard Solver
 
-(c) 2003-2007 Rayleigh-Bénard, Double diffusion by J. von Hardenberg (ISAC-CNR) 
-
-(c) 2003 MPI version by J. von Hardenberg (ISAC-CNR) and G. Passoni (POLIMI)
-
-(c) 2002 Navier-Stokes version by G. Passoni (POLIMI)
-
+(c) 2020      Non-homogeneous boundaries by J.von Hardenberg (PoliTO)
+(c) 2003-2013 Rayleigh-Bénard, Double diffusion by J. von Hardenberg (ISAC-CNR) 
+(c) 2003      MPI version by J. von Hardenberg (ISAC-CNR) and G. Passoni (POLIMI)
+(c) 2002      Navier-Stokes version by G. Passoni (POLIMI)
 
 ## Very short code description ##
 
@@ -81,26 +79,30 @@ _Example:_
 for the Ny=129 case.
 
 
-### param0 ###
+### param_namelist ###
 
-Set up also the file param0 with all the physical parameters for the experiment:
+We recently changed the configuration file to a standard Fortran namelist. It is still possible to use the old format (param0) by commenting `#define NAMELIST_PARAMS`in `config.h`.
 
-    ptan : stretching parameter for the vertical grid
-    qtan : stretching parameter for the vertical grid
-    Reynolds : Reynolds number if a NAvier-Stokes experient is performed
-    DD : vertical domain size
-    Lx, Lz : horizontal domain sizes
-    dt : time step  
-    ndt : tot # of time steps to run (E.g. if dt=1e-7 and you want to simulate in [0,0.02] you should set ndt=200000)
-    nsave : how often to save the output (in n. of timesteps)
-    Ra : Rayleigh number
-    Pr : Prandtl number
-    Kscalar : currently not used
-    Rt : Thermal Rayleigh number (for Fingering convection)
-    Rs : Saline Rayleigh number (for Fingering convection)
-    Le : Lewis number (for Fingering convection)
-    Omegay : Rotation y-component
-    Omegaz : Rotation z-component
+Set up  the file param_namelist with all the physical parameters for the experiment (this is only a subset of the possible parameters):
+
+    &NUMERIC
+      dt=1e-6     # Timestep
+      ttot=50000  # Total number of steps
+      nsave=250   # How often to save
+    &END
+
+    &PHYS
+      Lx=6.28318530717958   # Domain length
+      Lz=6.28318530717958   # Domain width
+      Ra=1e7                # Rayleigh number
+      Pr=0.71d0             # Prandtl number
+      Omegay=0.d0           # Rotation component y direction
+      Omegaz=0.d0           # rotation component z direction
+      lapse=0.d0            # Lapse rate
+      Re=300.d0             # Reynolds number
+    &END
+
+Not all paramters are used for all configurations. For example `lapse`and `Re` are ignored for the standard Rayleigh-Bénard problem.
 
 ## Compiling ##
 
@@ -120,9 +122,7 @@ Uncomment this line if you would like to compile a scalar (not MPI) version of t
 
 It's highly recommended to create a separate 'run' directory and to copy there the following files:
 
-* `param0` (The main physical parameter file)
-* `param1` (parameters for timestepping - leave this one alone)
-* `cpuweights` (a silly file with a lot of 1 values - This one is used only if you have a cluster of very different machines and you want to distribute the load differently among them - just use it as it is)
+* `param_namelist` (The main  parameter file)
 * `rb`  (our executable)
 
 You can create initial conditions with the tool `inicond` which will create a randomly perturbed (on T) linear conductive solution. 
@@ -132,6 +132,7 @@ The file `nrec.d` contains always the timestep of the latest save. When the code
 ## Tools ##
 
 The subdirectory 'tools' contains some useful tools.
+In order to compile them you will need to copy them to the same source directory as the rest of the code.
 The command alone gives a short explanation on its usage. Below a short list with some examples:
 
 _prof_ : extracts vertical temperature profiles and save it in a file (*.prf).
