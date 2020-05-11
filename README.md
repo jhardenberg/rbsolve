@@ -28,7 +28,7 @@ The convention in is this code is to call _x_ and _z_ the horizontal coordinates
 ### config.h ### 
 The file `config.h` contains options which define the physical structure of the model.
 
-* `ONLY2D`:  If you want a 2D problem.  This option reduces the 3D domain to a 2D using x and y directions. Remember to set also `kzmax=1` in `param.h`	
+* `ONLY2D`:  If you want a 2D problem.  This option reduces the 3D domain to a 2D one using x and y directions. Remember to set also `kzmax=1` in `param.h`	
 * `TEMPERATURE`: if defined, a convective problem is solved (RB). Else the Navier-Stokes equations are solved.
 * `FINGER, SALINITY`: to run a salt fingering experiment. `SALINITY` adds the second scalar, `FINGER` chooses a particular scaling of the equations.
 * `FREE_SLIP_TOP` etc. :  Choose _free slip_ velocity  conditions for top or bottom boundaries (no slip is default mode).
