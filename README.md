@@ -10,14 +10,12 @@
 
 RBsolve is a CFD code for Rayleigh-Benard (natural convection) problem simulation with Boussinesq approximation.
 The code is written in FORTRAN and solves a system of coupled equations for momentum and temperature in the incompressibility hypothesis.
-Introduction of a second active scalar (for double diffusive problem) or the usage for DNS simulations are additional available options.
-
+Introduction of a second active scalar (for solving a double diffusive problem) or of a constant lapse rate or rdiative cooling are additional available options.
 
 ## Numerical features ##
 
 Time advancement is performed using a third-order Runge-Kutta method (Kim and Moin, J. Comp. Phys. 59 (2), 1985). 
-spatial integration is based on a pseudospectral method for the horizontal directions and a finite differences method for the vertical dimension, using a grid which is denser close to the vertical boundaries.
-Horizontal periodic geometry is assumed.
+Spatial integration is based on a pseudospectral method for the horizontal directions and a finite differences method for the vertical dimension, using a grid which is denser close to the vertical boundaries. A horizontal periodic geometry is assumed.
 MPI parallelization is available and performed using a vertical partitioning in slices.
 
 The convention in is this code is to call _x_ and _z_ the horizontal coordinates and _y_ the vertical. Correspondingly the velocity components are _(u,w,v)_
@@ -28,34 +26,32 @@ The convention in is this code is to call _x_ and _z_ the horizontal coordinates
 The file `config.h` contains options which define the physical structure of the model.
 
 * `ONLY2D`:  If you want a 2D problem.  This option reduces the 3D domain to a 2D using x and y directions. Remember to set also `kzmax=1` in `param.h`	
-
 * `TEMPERATURE`: if defined, a convective problem is solved (RB). Else the Navier-Stokes equations are solved.
-
-* `FINGER, SALINITY`: to run a salt fingering experiment.
-
-* `FREE_SLIP_TOP`etc. :  Choose _free slip_ or _no slip_ separately for top and bottom boundaries (no slip is default mode).
-  
-* `FLUXT_BOTTOM` etc. : used to define fixed flux boundary conditions. 
-
-* `TEMPERATURE_BOTTOM`etc: Dirichlet BCs for top and bottom.
-
+* `FINGER, SALINITY`: to run a salt fingering experiment. `SALINITY` adds the second scalar, `FINGER` chooses a particular scaling of the equations.
+* `FREE_SLIP_TOP` etc. :  Choose _free slip_ velocity  conditions for top or bottom boundaries (no slip is default mode).
+* `FLUXT_BOTTOM` etc. : used to define fixed flux thermal boundary conditions.
+* `FLUXS_BOTTOM` etc. : used to define fixed flux haline boundary conditions.
+* `NOFLUX_TOP` etc.: alternative to set adiabatic boundaries. Equivalent to `FLUXT_TOP 0.d0` (bast spares one line of code).
+* `TEMPERATURE_BOTTOM` etc.: Dirichlet thermal BCs for top and bottom.
+* `SCALAR_BOTTOM` etc.: Dirichlet haline BCs for top and bottom.
+* `PATTERNT_BOTTOM` etc.: Non-homogeneous Dirichlet BC. Requires files `temperature_bottom.dat` and/or `temperature_top.dat`. 
 * `PRESSURE_GRADIENT`: defines a mean pressure gradient (useful for NS experiments)
 
-At the bottom of config.h notice the following definitions (for Rayleigh-Benard problem):
+At the bottom of config.h notice the following definitions (for the Rayleigh-Benard problem):
 
     #define VDIFF (Pr)
     #define BUOYT (Ra*Pr)
     #define TDIFF (1.d0)
 
-which imply that the problem is solved using the normalization where in the equations: Pr is in front of the Laplacian in the momentum equation, Ra*Pr is in front of the buoyancy term and thermal diffusivity is 1. That is, the equations are non-dimensionalized respect to te diffusive time scale. 
+which imply that the problem is solved using the normalization where in the equations: `Pr` is in front of the Laplacian in the momentum equation, `Ra*Pr` is in front of the buoyancy term and thermal diffusivity is 1. That is, the equations are non-dimensionalized respect to the diffusive time scale. Other scalings (such as `PRANDTL` or `FINGER`) are possible.
 
 ### param.h ###
 
-The file `param.h` is used to select the resolution of the model. 
+The file `param.h` is used to select the resolution of the model. The model uses statically allocated arrays, so resolution has to be chosen at compile time.
 
 * _Spatial resolution_
 
-To set the spatial resolution, uncomment a triple of Nx, Nz (the horizontal resolution) and Ny (the vertical resolution).
+To set the spatial resolution, uncomment a triplet of Nx, Nz (the horizontal resolution) and Ny (the vertical resolution).
 The code follows an engineering convention by which the vertical is y.
 
 * _Spectral resolution_
@@ -73,8 +69,8 @@ where NPROC is the number of cores you plan to use and Nylmem is how may vertica
 
 _Example:_
  
-   parameter (Nylmem=17)
-   parameter  (NPROC=8)
+    parameter (Nylmem=17)
+    parameter  (NPROC=8)
    
 for the Ny=129 case.
 
@@ -106,7 +102,7 @@ Not all parameters are used for all configurations. For example `lapse`and `Re` 
 
 ## Compiling ##
 
-Edit the `Makefile` to set up you compiler and its options some examples are included. 
+Edit the `Makefile` to set up you compiler and its options. Some examples are included. 
 
 To compile the tools you need to specify in the Makefile that you are compiling without MPI leaving the line "NOMPI=1" uncommented.
 To compile the main code with MPI you need to comment this line first.
@@ -114,9 +110,9 @@ To compile the main code with MPI you need to comment this line first.
 To make sure that everything is compiled correctly better do a "make clean" first.
 To compile the main code use the command "make".
 
-config.h also contains a line
+`config.h` also contains a line
       #define NOMPI 
-Uncomment this line if you would like to compile a scalar (not MPI) version of the code, but leave it for compiling the tools which are all serial. (This is actually redundant with the NOMPI in the makefile and will be removed soon)
+Leave this line commented to compile a parallel (MPI) version of the code, but uncomment it for compiling the tools which are all serial.
 
 ## Running ##
 
