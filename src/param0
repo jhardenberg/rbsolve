@@ -9,7 +9,6 @@
 500          saveevery
 1.d7        Rayleigh
 0.71d0         Prandtl
-1.d0         Kscalar
 1.025e13     Rt
 1.e13        Rs
 3.d0         Le

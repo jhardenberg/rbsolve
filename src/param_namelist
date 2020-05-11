@@ -17,7 +17,6 @@
       Re=300.d0
       Ra=1e7
       Pr=0.71d0
-      Kscalar=1.d0
       Rt=1.025e7
       Rs=1e7
       Le=3.d0

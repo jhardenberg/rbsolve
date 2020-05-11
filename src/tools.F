@@ -292,7 +292,6 @@ c Read in the parameters
       nsave=500
       Ra=1e7
       Pr=0.71d0
-      Kscalar=1.d0
       Rt=1.025e7
       Rs=1e7
       Le=3.d0
@@ -399,7 +398,6 @@ c Read in the parameters
       read (11,*) nsave
       read (11,*)  Ra
       read (11,*)  Pr
-      read (11,*)  Kscalar
       read (11,*) Rt
       read (11,*) Rs
       read (11,*) Le
