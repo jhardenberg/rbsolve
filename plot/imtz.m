@@ -1,20 +1,37 @@
-	function im(t,nz,sc)
-	%clf
-    %t
-	load coord1
-	filename=sprintf('t%07d.zzz',t);
-        tt=load(filename); 
+function imtz(t)
+    L=2*pi;
+    anom=false;
+    cmap=redblue();
+    clims=[-0.5 0.5];
+    fid = fopen("coord");
+    coord = textscan(fid, "%s %d %s %f");
+    fclose(fid);
+    nz=length(coord{:,2});
+    nz=floor((nz-1)/2)+1;
+    coord=coord{1:nz,4};
+    nz=nz-2;
+    filename=sprintf('t%07d.zzz',t);
+    tt=load(filename); 
 	n=length(tt); n=n/nz;
-	zz=coord1(2:(nz+1),2);
-        xx=(0:(n-1))/n*2*pi;
+	zz=coord(2:(nz+1));
+    xx=(0:(n-1))/n*L;
 	tt=reshape(tt,n,nz);
-	tt1=tt;%-ones(n,1)*mean(tt);
-	%  subplot(2,1,nn)
-	if(length(sc)==0)
-	pcolor(xx,zz , tt1'); shading flat; colorbar;
+    if (anom)
+	    tt1=tt-ones(n,1)*mean(tt);
     else
-	pcolor(xx,zz, tt1'); shading flat;colorbar;
-        end
-	set(gca,'YDir','normal','FontSize',12);
-	xlabel('x');
-	ylabel('z');
+        tt1=tt;
+    end
+
+    pcolor(xx,zz+0.5 , tt1'); shading flat; hc=colorbar;
+    ylabel(hc,'T')
+    caxis(clims);
+    colormap(cmap);
+    set(gca,'YDir','normal','FontSize',12);
+    set(gca,'XTick',[0 pi/2 pi 1.5*pi (pi*2)-(2*pi/n)])
+    set(gca,'XTickLabel',{'0', '\pi/2', '\pi', '3/2\pi', '2\pi'})
+    xlabel('x');
+    ylabel('z');
+    title(sprintf("step=%d",t));
+    set(gca,'Fontsize',16)
+end
+    
