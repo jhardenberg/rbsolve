@@ -12,7 +12,7 @@ F77COMP	=	gfortran
 LINKER =	gfortran
 CFLAGS =       -O3 -ffixed-line-length-none
 #LDFLAGS        =   -static -lrfftw -lfftw   -lm
-LDFLAGS        =  -L/opt/local/lib  -lfftw3 -lm
+LDFLAGS        =  -L/usr/local/lib  -lfftw3 -lm
 
 
 # Intel ?86/g77 options:
@@ -197,6 +197,10 @@ PROFVAR_OBJ	=	profvar.o fourier1.o fourier1_tmpt.o tools.o salva.o farg.o
 profvar: $(PROFVAR_OBJ)	
 	$(COMP)  $(CFLAGS) -D"NOMPI"  -o profvar $(PROFVAR_OBJ) $(LDFLAGS)
 
+PROFMEAN_OBJ	=	profmean.o fourier1.o fourier1_tmpt.o tools.o salva.o punti.o farg.o 
+profmean: $(PROFMEAN_OBJ)	
+	$(COMP)  $(CFLAGS) -D"NOMPI"  -o profmean $(PROFMEAN_OBJ) $(LDFLAGS)
+
 PROFILESSER_OBJ    =       profser.o fourier1ser.o tools.o salva.o
 profser: $(PROFILESSER_OBJ)
 	$(COMP)  $(CFLAGS) -D"NOMPI"  -o profser $(PROFILESSER_OBJ) $(LDFLAGS)
@@ -204,8 +208,6 @@ profser: $(PROFILESSER_OBJ)
 PDFJOINTBF_OBJ    =       pdfjointbf.o fourier1ser.o tools.o salva.o
 pdfjointbf: $(PDFJOINTBF_OBJ)
 	$(COMP)  $(CFLAGS) -D"NOMPI"  -o pdfjointbf $(PDFJOINTBF_OBJ) $(LDFLAGS)
-
-
 
 INICONDS_OBJ    =       iniconds.o tools.o salva.o ran2.o punti.o boundary.F farg.o
 iniconds: $(INICONDS_OBJ)
@@ -294,6 +296,8 @@ pdf.o: config.h param.h
 poiss_im.o: config.h param.h
 prof.o: config.h param.h
 profser.o: config.h param.h
+profmean.o: config.h param.h
+profvar.o: config.h param.h
 punti.o: config.h param.h
 salva.o: config.h param.h
 sectionh.o: config.h param.h
