@@ -74,7 +74,7 @@ c Computes the vertical mean  of a profile in time
                 ww=ww+(yp(j)-yp(j-1))
 	     enddo
              xm=xm/ww
-	     write(20,'(i7,x,e16.7)') it,xv
+	     write(20,'(i7,x,e16.7)') it,xm
       	   enddo
 
       close(20)
