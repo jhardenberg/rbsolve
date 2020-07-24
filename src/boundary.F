@@ -93,7 +93,7 @@ c TEMPERATURE boundary condition
 #ifdef PATTERNT_TOP
 * Temperature pattern at bottom
       if(iam.eq.NPROC) then
-          tt(:,:,1)=ttop(:,:)
+          tt(:,:,Nyl)=ttop(:,:)
       endif
 #else
 * Fixed temperature at top
