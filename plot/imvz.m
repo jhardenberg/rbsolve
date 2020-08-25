@@ -11,7 +11,7 @@ function imtz(t,clims)
     nz=floor((nz-1)/2)+1;
     coord=coord{1:nz,4};
     nz=nz-2;
-    filename=sprintf('t%07d.zzz',t);
+    filename=sprintf('v%07d.zzz',t);
     tt=load(filename); 
 	n=length(tt); n=n/nz;
 	zz=coord(2:(nz+1));

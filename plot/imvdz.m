@@ -1,9 +1,8 @@
-function imtz(t,clims)
+function tt1g=imtz(t,clims)
     L=2*pi;
     anom=false;
     cmap=redblue();
-%    clims=[-0.5 0.5];
-
+    %clims=[-0.5 0.5];
     fid = fopen("coord");
     coord = textscan(fid, "%s %d %s %f");
     fclose(fid);
@@ -11,7 +10,7 @@ function imtz(t,clims)
     nz=floor((nz-1)/2)+1;
     coord=coord{1:nz,4};
     nz=nz-2;
-    filename=sprintf('t%07d.zzz',t);
+    filename=sprintf('v%07d.zzz',t);
     tt=load(filename); 
 	n=length(tt); n=n/nz;
 	zz=coord(2:(nz+1));
@@ -22,8 +21,8 @@ function imtz(t,clims)
     else
         tt1=tt;
     end
-
-    pcolor(xx,zz+0.5 , tt1'); shading flat; hc=colorbar;
+    tt1g=(tt1(:,3:nz)-tt1(:,1:(nz-2)))./(ones(n,1)*(zz(3:nz)-zz(1:(nz-2)))');
+    pcolor(xx,zz(2:(nz-1))+0.5 , tt1g'); shading flat; hc=colorbar;
     ylabel(hc,'T')
     caxis(clims);
     colormap(cmap);
