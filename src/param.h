@@ -13,8 +13,13 @@
 !        parameter (Nx=384,Ny=385,Nz=384)
 !        parameter (kx=336	,kz=336)
 
-        parameter (Nx=256,Ny=193,Nz=256)
-        parameter (kx=170,kz=170)
+!        parameter (Nx=256,Ny=129,Nz=1)
+!        parameter (kx=170,kz=0)
+        parameter (Nx=192,Ny=129,Nz=1)
+        parameter (kx=154,kz=0)
+!        parameter (Nx=1024,Ny=193,Nz=1)
+!        parameter (kx=680,kz=0)
+
 !        parameter (kx=204,kz=204)
 
 !        parameter (Nx=384,Ny=257,Nz=384)
@@ -44,8 +49,8 @@
 !*        parameter (kx=204,kz=204)
 !*        parameter (Nx=768,Ny=5120,Nz=768)
 
-!*        parameter (Nx=192,Ny=129,Nz=1)
-!*        parameter (kx=154,kz=0)
+!        parameter (Nx=192,Ny=129,Nz=1)
+!        parameter (kx=154,kz=0)
 
 !*        parameter (Nx=192,Ny=257,Nz=192)
 !*        parameter (kx=154,kz=154)
@@ -112,7 +117,7 @@
       parameter (Nylmem=Ny)
       parameter  (NPROC=1)
 #else
-      parameter (Nylmem=7)
-      parameter  (NPROC=32)
+      parameter (Nylmem=49)
+      parameter  (NPROC=4)
 #endif
 

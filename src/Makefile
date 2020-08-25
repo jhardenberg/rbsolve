@@ -10,9 +10,9 @@ OMPI_F77 =      gfortran
 
 F77COMP	=	gfortran
 LINKER =	gfortran
-CFLAGS =       -O3 -ffixed-line-length-none
+CFLAGS =       -O3 -ffixed-line-length-none 
 #LDFLAGS        =   -static -lrfftw -lfftw   -lm
-LDFLAGS        =  -L/usr/local/Cellar/fftw/3.3.8/lib/  -lfftw3 -lm
+LDFLAGS        =  -L/usr/local/Cellar/fftw/3.3.8_1/lib/  -lfftw3 -lm
 
 
 # Intel ?86/g77 options:
@@ -64,7 +64,7 @@ endif
 NAVIER_OBJ	=	boundary.o build_star.o conv.o crea_df.o \
 			crea_e.o diffus.o fourier1.o  \
 			fourier2.o tn_prinf_helmp.o prinf_helmp.o  \
-			tn_prinf_helmu.o prinf_helmu.o  \
+			tn_prinf_helmu.o prinf_helmu.o prinf_influence.o  \
 			main.o mpitools.o poiss_im.o punti.o salva.o tn_poiss.o \
 			tools.o tridiagmpi.o velocita.o farg.o \
   			crea_df_prinf.o crea_e_prinf.o
@@ -314,6 +314,7 @@ crea_df_prinf.o: config.h param.h
 prinf_helmp.o: config.h param.h
 tn_prinf_helmu.o: config.h param.h
 prinf_helmu.o: config.h param.h
+prinf_influence.o: config.h param.h
 tn_poiss.o: config.h param.h
 tools.o: config.h param.h
 tridiagmpi.o: config.h
