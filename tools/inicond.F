@@ -53,6 +53,7 @@ c	perturbed with white noise on all wavenumbers
       sigmaL=2
       mediaL=10
       ampl=0.001
+!      ampl=0.00
 
       idum=-32433
 
@@ -95,6 +96,7 @@ c     Crea lo spettro verticale (una gaussiana)
 
          print *,l
       do j=1,Ny
+!      do j=(Ny-1)/2+1,(Ny-1)/2+1
 
         T_L(l)=dsin(l*pi2*yv(j))
 
@@ -112,7 +114,7 @@ c     Crea lo spettro verticale (una gaussiana)
           t(1,1,j)=(yv(j)/DD+DD/2)*
      & (TEMPERATURE_TOP-TEMPERATURE_BOTTOM)+TEMPERATURE_BOTTOM      
       enddo
-      call savefield(t,'t',0,0.0)
+      call savefield(t,'t',0,0.0d0)
   
       end
 
