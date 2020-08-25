@@ -53,7 +53,6 @@ c	perturbed with white noise on all wavenumbers
       sigmaL=2
       mediaL=10
       ampl=0.001
-!      ampl=0.00
 
       idum=-32433
 
@@ -65,16 +64,16 @@ c	perturbed with white noise on all wavenumbers
       call punti (DD,ptan,qtan,yp,yv,qp,rp,sp,qv,rv,sv)
 
       do j=1,Ny
-	do i=1,nwax+1
+        do i=1,nwax+1
            do k=1,2*nwaz+1
-		t(i,k,j)=(0.d0,0.d0)
+              t(i,k,j)=(0.d0,0.d0)
            enddo
         enddo
       enddo
 
-      call savefield(t,'u',0,0.0)
-      call savefield(t,'v',0,0.0)
-      call savefield(t,'w',0,0.0)
+      call savefield(t,'u',0,0.d0)
+      call savefield(t,'v',0,0.d0)
+      call savefield(t,'w',0,0.d0)
 
 c     Crea lo spettro orrizontale
       do i=1,nwax+1
@@ -85,31 +84,27 @@ c     Crea lo spettro orrizontale
       enddo
 c     Crea lo spettro verticale (una gaussiana)
 
-
-
-
-
       do l=1,(Ny+1)/2
 
-         B_L(l)=(1/(sigmaL*dsqrt(pi2)))*
-     &   dexp(-0.5d0*((l-mediaL)/sigmaL)**2.d0)
+        B_L(l)=(1/(sigmaL*dsqrt(pi2)))*
+     &  dexp(-0.5d0*((l-mediaL)/sigmaL)**2.d0)
 
-         print *,l
-      do j=1,Ny
-!      do j=(Ny-1)/2+1,(Ny-1)/2+1
+        print *,l
+        do j=1,Ny
 
-        T_L(l)=dsin(l*pi2*yv(j))
+          T_L(l)=dsin(l*pi2*yv(j))
 
-        do i=1,nwax+1
-          do k=1,2*nwaz+1
-            rr=ran2(idum)
-            ReT=A(i,k)*dcos(rr*pi2)
-            ImT=A(i,k)*dsin(rr*pi2)
-            t(i,k,j)=t(i,k,j)+ampl*B_L(l)*dcmplx(ReT,ImT)*T_L(l)    
-         enddo
+          do i=1,nwax+1
+            do k=1,2*nwaz+1
+              rr=ran2(idum)
+              ReT=A(i,k)*dcos(rr*pi2)
+              ImT=A(i,k)*dsin(rr*pi2)
+              t(i,k,j)=t(i,k,j)+ampl*B_L(l)*dcmplx(ReT,ImT)*T_L(l)    
+            enddo
+          enddo
         enddo
       enddo
-      enddo
+
       do j=1,Ny
           t(1,1,j)=(yv(j)/DD+DD/2)*
      & (TEMPERATURE_TOP-TEMPERATURE_BOTTOM)+TEMPERATURE_BOTTOM      
@@ -117,6 +112,3 @@ c     Crea lo spettro verticale (una gaussiana)
       call savefield(t,'t',0,0.0d0)
   
       end
-
-
-

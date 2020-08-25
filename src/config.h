@@ -63,9 +63,17 @@
 !-#define FLUXS_TOP (1.d0)
 !-#define NOFLUXS_TOP
 
+!* Non-homogeneous Temperature boundary conditions (Dirichlet or flux)
+!-#define PATTERNT_BOTTOM
+!-#define PATTERNT_TOP
+
 !**************************
 !* Technical code options *
 !*************************
+
+!* Read params from standard namelist
+!* uses old format if not defined (param0, param1)
+#define NAMELIST_PARAMS
 
 !* Do you want a scalar version w/out MPI? uncomment this!  *
 ! Actually not needed anymore ... ignore #define NOMPI
@@ -147,10 +155,12 @@
 #define INITFOUR_FFTW initfour
 #define FOURIER1_FFTW fourier1
 #define FOURIER2_FFTW fourier2
+#define FOURIER2_FFTW_SINGLE2D fourier2_single2d
 #else
 #define INITFOUR_TMPT initfour
 #define FOURIER1_TMPT fourier1
 #define FOURIER2_TMPT fourier2
+#define FOURIER2_TMPT_SINGLE2D fourier2_single2d
 #endif
 
 

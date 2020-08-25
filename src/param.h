@@ -86,11 +86,11 @@
 !c      parameter (Nx=256,Ny=65,Nz=256)
 !c      parameter (kx=224,kz=224)
 	
-!c      parameter (Nx=768,Ny=64,Nz=192)
-!c      parameter (kx=614	,kz=154)
-!c        parameter (Nx=768,Ny=5120,Nz=192)
-!        parameter (Nx=768,Ny=5120,Nz=192)
-!        parameter (kx=614,kz=154)
+!       parameter (Nx=768,Ny=64,Nz=192)
+!       parameter (kx=614	,kz=154)
+!       parameter (Nx=768,Ny=5120,Nz=192)
+!       parameter (Nx=768,Ny=5120,Nz=192)
+!       parameter (kx=614,kz=154)
 
 !c kx,kz must be smaller than Nx,Nz and even
       integer*4 nwax,nwaz
@@ -112,7 +112,7 @@
      &          Nylmax1,Nylmin1,
      &          Nyls,myMPI_ALL_TYPE,myMPI_VEL_TYPE
 
-!* This is the maximum  slice thickness */
+!* This is the maximum  slice thickness 
 #ifdef NOMPI
       parameter (Nylmem=Ny)
       parameter  (NPROC=1)

@@ -38,17 +38,14 @@ c 'pint' is p interpolated on yv(j)
         enddo
        enddo 
 
-*       XXXXXXXX
 *       wt(1,1,j)=(0.d0,0.d0)
        wt(1,1,j)=wstar(1,1,j)
-*      write(24,*) j,dreal(wstar(1,1,j)),dreal(ustar(1,1,j))
 
 c	Does this solve our pressure problem ?
        vt(1,1,j)=(0.d0,0.d0)
 cxxxx Should we impose vertical vel ave to 0 ?
        ut(1,1,j)=ustar(1,1,j)
       enddo 
-*      write(23,*)
 
       return
       end  

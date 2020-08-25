@@ -23,7 +23,6 @@ c **********************************************************************
       return
       end
 
-
       subroutine salvatotv (ut,inum)
 #include "param.h"
       real*8 ut(Nx,Nz,0:Nyl+1)
@@ -33,7 +32,6 @@ c **********************************************************************
       do j=1,Nyl
              do i=1,Nx
                 a1(i,j)=ut(i,k,j)
-c             write(inum,'(e16.7)')  ut(i,k,j)
              enddo
       enddo
       write(inum) a1
@@ -50,7 +48,6 @@ c             write(inum,'(e16.7)')  ut(i,k,j)
             a1(i,k)= ut(i,k,10) 
             a2(i,k)= ut(i,k,65) 
             a3(i,k)= ut(i,k,120) 
-c      write(inum,'(3e16.7)')  ut(i,k,10),ut(i,k,120),ut(i,k,65)
           enddo
       enddo
       write(inum)  a1
@@ -58,8 +55,6 @@ c      write(inum,'(3e16.7)')  ut(i,k,10),ut(i,k,120),ut(i,k,65)
       write(inum)  a3
       return
       end
-
- 
 
       subroutine salvatot (ut,vt,wt,inum)
       
@@ -271,7 +266,107 @@ cmpi        include 'mpif.h'
 
       end
 
+#ifdef NAMELIST_PARAMS
+      subroutine read_para(idisp)
 
+c Read in the parameters
+#include "param.h"
+#include "allpara.h"
+
+      real*8 kcx,kcz
+      integer*4 idisp
+
+      real*8 pi2,pi
+      parameter (pi2=6.28318530717959d0)
+
+      pi=pi2/2
+
+      ptan=1.7
+      qtan=1.5
+      Re=300.d0
+      DD=1.d0
+      Lx=pi2
+      Lz=pi2
+      dt=1e-6
+      ttot=50000
+      nsave=500
+      Ra=1e7
+      Pr=0.71d0
+      Kscalar=1.d0
+      Rt=1.025e7
+      Rs=1e7
+      Le=3.d0
+      Omegay=0.d0
+      Omegaz=0.d0
+
+      alfa(1)= 0.0d0
+      alfa(2)=0.066666666666d0
+      alfa(3)=0.166666666666d0
+      beta(1)=0.533333333333d0
+      beta(2)=0.066666666666d0
+      beta(3)=0.166666666666d0
+      gamma(1)=0.533333333333d0
+      gamma(2)=0.416666666666d0
+      gamma(3)=0.75d0
+      zeta(1)=0.d0
+      zeta(2)=-0.28333333333d0
+      zeta(3)=-0.41666666666d0
+
+      open(11,file='param_namelist')
+      read (11, numeric)
+      read (11, phys)
+      close (11)
+
+      invRe=1.d0/Re
+
+      if(idisp.eq.1) then
+        if(iam.eq.1) then
+          write(*,*) 'Nx=',Nx
+          write(*,*) 'Ny=',Ny
+          write(*,*) 'Nz=',Nz
+          write (*,*) 'ptan=',ptan
+          write (*,*) 'qtan=',qtan
+          write(*,*) 'DD=',DD
+          write(*,*) 'Lx=',Lx
+          write(*,*) 'Lz=',Lz
+          write(*,*) 'dt=',dt
+          write(*,*) 'ttot=',ttot
+          write(*,*) 'nsave=',nsave
+          write(*,*) 'Reynolds =', Re
+          write(*,*) 'Rayleigh =',Ra
+          write(*,*) 'Prandtl  =',Pr
+          write(*,*) 'Rt',Rt
+          write(*,*) 'Rs',Rs
+          write(*,*) 'Le',Le
+          write(*,*) 'Omegay',Omegay
+          write(*,*) 'Omegaz',Omegaz
+        endif
+#ifdef SALINITY
+        write(*,*) 'SALT FINGERS'
+#endif
+      endif
+
+      dx=Lx/dfloat(Nx)
+      dz=Lz/dfloat(Nz)
+
+      kcx=pi/dx
+      kcz=pi/dz
+      kxmin=2.d0*kcx/dfloat(Nx)
+      kzmin=2.d0*kcz/dfloat(Nz)
+
+      if(idisp.eq.1) then
+c Write stuff to file
+        open(12,file='tanh.par')
+        write(12,*) 'ptan=',ptan,' ','qtan=',qtan
+        write(12,*) 'Ny=',Ny,' ','Nx=',Nx,' ','Nz=',Nz
+        write(12,*) 'Re=',Re,' ','Lx=',Lx,' ','Lz=',Lz
+        write(12,*) 'dt=',dt,' ','ttot=',ttot,' ','nsave=',nsave
+        write(12,*) 'dx=',dx,' ','dz=',dz
+        close(12)
+      endif
+
+      end
+#else
       subroutine read_para(idisp)
 
 c Read in the parameters
@@ -356,22 +451,20 @@ c Read in coefficients for RK3
       kxmin=2.d0*kcx/dfloat(Nx)
       kzmin=2.d0*kcz/dfloat(Nz)
 
-	if(idisp.eq.1) then
+      if(idisp.eq.1) then
 c Write stuff to file
-
-      open(12,file='tanh.par')
-      write(12,*) 'ptan=',ptan,' ','qtan=',qtan
-      write(12,*) 'Ny=',Ny,' ','Nx=',Nx,' ','Nz=',Nz
-      write(12,*) 'Re=',Re,' ','Lx=',Lx,' ','Lz=',Lz
-      write(12,*) 'dt=',dt,' ','ttot=',ttot,' ','nsave=',nsave
-      write(12,*) 'dx=',dx,' ','dz=',dz
-      close(12)
-	endif
-
-
-
+        open(12,file='tanh.par')
+        write(12,*) 'ptan=',ptan,' ','qtan=',qtan
+        write(12,*) 'Ny=',Ny,' ','Nx=',Nx,' ','Nz=',Nz
+        write(12,*) 'Re=',Re,' ','Lx=',Lx,' ','Lz=',Lz
+        write(12,*) 'dt=',dt,' ','ttot=',ttot,' ','nsave=',nsave
+        write(12,*) 'dx=',dx,' ','dz=',dz
+        close(12)
+      endif
 
       end
+#endif
+
 
       subroutine crea_wave(kxm,kzm,K2,mm,nn,kxmin,kzmin)
 #include "param.h"
@@ -410,8 +503,3 @@ c Computation of wave vector arrays
       end do
 
       end
-
-
-
-
-
