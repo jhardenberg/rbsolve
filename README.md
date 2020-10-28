@@ -1,7 +1,7 @@
 # RBsolve
 ## Pseudospectral Rayleigh-Bénard Solver
 
-(c) 2020      Non-homogeneous boundaries by J. von Hardenberg (PoliTO)
+(c) 2020      Non-homogeneous boundaries aand Infinite Prandtl convection by J. von Hardenberg (PoliTO)
 
 (c) 2003-2013 Rayleigh-Bénard, Double diffusion by J. von Hardenberg (ISAC-CNR) 
 
