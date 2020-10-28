@@ -175,7 +175,7 @@ cmpi      include 'mpif.h'
       integer i,j,M,ip,N,ip2m2,ip2m1,NPR
       COMPLEX xr(N,M)
       REAL xlh(N,M),xuh(N,M)
-      COMPLEX reds(N,0:M),xs(N,M)
+      COMPLEX reds(N,0:NR),xs(N,M)
       COMPLEX uhcoeff(N),lhcoeff(N)
 
       ip2m1=ip*2-1

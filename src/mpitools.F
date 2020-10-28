@@ -18,7 +18,6 @@ cmpi        include 'mpif.h'
         datatype=myMPI_ALL_TYPE
        
         if(NPROC.ne.1) then
-
         if(iam.eq.1) then
       call MPI_SENDRECV(ff(1,1,1),1,datatype,MPI_PROC_NULL,99,
      &                   ff(1,1,Nyl+1),1,datatype,iam,99,
@@ -41,15 +40,99 @@ cmpi        include 'mpif.h'
      &                   ff(1,1,0),1,datatype,iam-2,98,
      &        MPI_COMM_WORLD,st,ierr)
         endif
-
         endif
-
 #endif
+        end
+
+        subroutine mpighost3(ff)
+*     Exchanges ghost boundary conditions using MPI_SENDRCV
+*     calls.  Uses the new datatype myMPI_VEL_TYPE
+*     defined in the main, exchanging all 3 velocities 
+
+#include "param.h"
+cmpi        include 'mpif.h'
+
+        complex*16 ff(nwax+1,2*nwaz+1,0:Nyl+1)
+
+#ifndef NOMPI
+        integer sbuf,ierr,st(MPI_STATUS_SIZE),datatype
         
+
+        datatype=myMPI_VEL_TYPE
+
+        if(NPROC.ne.1) then
+        if(iam.eq.1) then
+      call MPI_SENDRECV(ff(1,1,1),1,datatype,MPI_PROC_NULL,95,
+     &                   ff(1,1,Nyl+1),1,datatype,iam,95,
+     &        MPI_COMM_WORLD,st,ierr)
+      call MPI_SENDRECV(ff(1,1,Nyl),1,datatype,iam,94,
+     &                   ff(1,1,0),1,datatype,MPI_PROC_NULL,94,
+     &        MPI_COMM_WORLD,st,ierr)
+        else if(iam.eq.NPROC) then
+      call MPI_SENDRECV(ff(1,1,1),1,datatype,iam-2,95,
+     &        ff(1,1,Nyl+1),1,datatype,MPI_PROC_NULL,95,
+     &        MPI_COMM_WORLD,st,ierr)
+      call MPI_SENDRECV(ff(1,1,Nyl),1,datatype,MPI_PROC_NULL,94,
+     &                   ff(1,1,0),1,datatype,iam-2,94,
+     &        MPI_COMM_WORLD,st,ierr)
+        else
+      call MPI_SENDRECV(ff(1,1,1),1,datatype,iam-2,95,
+     &                   ff(1,1,Nyl+1),1,datatype,iam,95,
+     &        MPI_COMM_WORLD,st,ierr)
+      call MPI_SENDRECV(ff(1,1,Nyl),1,datatype,iam,94,
+     &                   ff(1,1,0),1,datatype,iam-2,94,
+     &        MPI_COMM_WORLD,st,ierr)
+        endif
+        endif
+#endif
+        end
+
+        subroutine mpighost1(ff)
+*     Exchanges ghost boundary conditions using MPI_SENDRCV
+*     calls. Exchanges BCs for one single field
+
+#include "param.h"
+cmpi        include 'mpif.h'
+
+        complex*16 ff(nwax+1,2*nwaz+1,0:Nyl+1)
+
+#ifndef NOMPI
+        integer sbuf,ierr,st(MPI_STATUS_SIZE),datatype
+
+        datatype=MPI_COMPLEX16
+        sbuf=(nwax+1)*(2*nwaz+1)
+
+        if(NPROC.ne.1) then
+        if(iam.eq.1) then
+      call MPI_SENDRECV(ff(1,1,1),sbuf,datatype,MPI_PROC_NULL,93,
+     &                   ff(1,1,Nyl+1),sbuf,datatype,iam,93,
+     &        MPI_COMM_WORLD,st,ierr)
+      call MPI_SENDRECV(ff(1,1,Nyl),sbuf,datatype,iam,92,
+     &                   ff(1,1,0),sbuf,datatype,MPI_PROC_NULL,92,
+     &        MPI_COMM_WORLD,st,ierr)
+        else if(iam.eq.NPROC) then
+      call MPI_SENDRECV(ff(1,1,1),sbuf,datatype,iam-2,93,
+     &        ff(1,1,Nyl+1),sbuf,datatype,MPI_PROC_NULL,93,
+     &        MPI_COMM_WORLD,st,ierr)
+      call MPI_SENDRECV(ff(1,1,Nyl),sbuf,datatype,MPI_PROC_NULL,92,
+     &                   ff(1,1,0),sbuf,datatype,iam-2,92,
+     &        MPI_COMM_WORLD,st,ierr)
+        else
+      call MPI_SENDRECV(ff(1,1,1),sbuf,datatype,iam-2,93,
+     &                   ff(1,1,Nyl+1),sbuf,datatype,iam,93,
+     &        MPI_COMM_WORLD,st,ierr)
+      call MPI_SENDRECV(ff(1,1,Nyl),sbuf,datatype,iam,92,
+     &                   ff(1,1,0),sbuf,datatype,iam-2,92,
+     &        MPI_COMM_WORLD,st,ierr)
+        endif
+        endif
+#endif
         end
 
 
-        subroutine mpighostup(ff)
+
+
+      subroutine mpighostup(ff)
 *     Exchanges ghost boundary conditions using MPI_SENDRCV
 *     calls.
 *     This one sends up only (used for p)

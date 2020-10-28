@@ -104,10 +104,11 @@ c     Crea lo spettro verticale (una gaussiana)
           enddo
         enddo
       enddo
+
       do j=1,Ny
           t(1,1,j)=(yv(j)/DD+DD/2)*
      & (TEMPERATURE_TOP-TEMPERATURE_BOTTOM)+TEMPERATURE_BOTTOM      
       enddo
-      call savefield(t,'t',0,0.d0)
+      call savefield(t,'t',0,0.0d0)
   
       end

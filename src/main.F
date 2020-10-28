@@ -237,7 +237,7 @@ cmpi      call MPI_FINALIZE(ierr)
 #endif
 
       complex*16 p(nwax+1,2*nwaz+1,0:Nylmem+1)
-
+    
 *     These arrays contain the principal diagonals of
 *     the Helmholtz problem
       real*8 D(nwax+1,2*nwaz+1,Nylmem)
@@ -245,11 +245,33 @@ cmpi      call MPI_FINALIZE(ierr)
       real*8 F(nwax+1,2*nwaz+1,Nylmem)
 
 #define NX ((nwax+1)*(2*nwaz+1))
+#define NNR (2*NPROC-2)
+
+#ifdef PRINF 
+      real*8 Du(nwax+1,2*nwaz+1,Nylmem)
+      real*8 Eu(nwax+1,2*nwaz+1,Nylmem)
+      real*8 Fu(nwax+1,2*nwaz+1,Nylmem)
+      real*8 xlhu(NX,Nylmem)
+      real*8 xuhu(NX,Nylmem)
+      real*8 redau(NX,0:NNR+1)
+      real*8 redbu(NX,0:NNR+1)
+      real*8 redcu(NX,0:NNR+1)
+      complex*16 redru(NX,0:NNR+1)
+
+      complex*16 p1(nwax+1,2*nwaz+1,0:Nylmem+1)
+      complex*16 p2(nwax+1,2*nwaz+1,0:Nylmem+1)
+      complex*16 u1(nwax+1,2*nwaz+1,0:Nylmem+1)
+      complex*16 u2(nwax+1,2*nwaz+1,0:Nylmem+1)
+      complex*16 v1(nwax+1,2*nwaz+1,0:Nylmem+1)
+      complex*16 v2(nwax+1,2*nwaz+1,0:Nylmem+1)
+      complex*16 w1(nwax+1,2*nwaz+1,0:Nylmem+1)
+      complex*16 w2(nwax+1,2*nwaz+1,0:Nylmem+1)
+      complex*16 uv(nwax+1,2*nwaz+1,0:Nylmem+1)
+#endif
 
       real*8 xlh(NX,Nylmem)
       real*8 xuh(NX,Nylmem)
 
-#define NNR (2*NPROC-2)
       real*8 reda(NX,0:NNR+1)
       real*8 redb(NX,0:NNR+1)
       real*8 redc(NX,0:NNR+1)
@@ -277,8 +299,8 @@ c Read in initial condition
 	print *,'reading nrec'
         open(unit=10,file='nrec.d')
         read(10,*,end=111) itime,rtime
+ 111	continue
         close(10)
- 111    continue
 #ifndef NOMPI
         call ibroadcast(itime,SAVENODE)
         call rbroadcast(rtime,SAVENODE)
@@ -388,7 +410,6 @@ c	Diagnostics
      + abs(  u(5,1,18,iv1))
 #endif
 
-
       call dealias(u_1)
       call dealias(v_1)
       call dealias(w_1)
@@ -415,15 +436,51 @@ c Computation of the y-grid parameters
 c Computation of the tridiagonal matrices for the pressure Helmoltz eq.
 c These are not dependent on the wave number
 
+#ifndef PRINF
       call Crea_DF (qp,sp,D,F)
       call Crea_E  (qp,rp,sp,K2,E)
-  
 * Compute static part of tridiagonal problem
 * D and F are changed, uo and vo are used as temporary storage
-
       call tridlhs(D,E,F,reda,redb,redc,xlh,xuh,
      +             uo,vo,Nylmax1,NX,NPROC,iam)
+#else
+      call Crea_DF_prinf (qp,sp,D,F)
+      call Crea_DF_prinf_u (qv,sv,Du,Fu)
+      call Crea_E_prinf  (qp,rp,sp,yp,K2,E,Ra)
+      call Crea_E_prinf_u  (qv,rv,sv,yv,K2,Eu,Ra)
+
+* Compute static part of tridiagonal problem
+* D and F are changed, uo and vo are used as temporary storage
+      call tridlhs(D,E,F,reda,redb,redc,xlh,xuh,
+     +             uo,vo,Nylmax1,NX,NPROC,iam)
+      call tridlhs(Du,Eu,Fu,redau,redbu,redcu,xlhu,xuhu,
+     +             uo,vo,Nylmax,NX,NPROC,iam)
  
+* Compute p1 and p2
+       call prinf_helmp (t_1,
+     +     D,E,F,yv,yp,qp,sp,kxm,kzm,p1,
+     +     xlh,xuh,reda,redb,redc,redr,Ra,1.d0,0.d0)
+       call mpighostup(p1)
+       call prinf_helmp (t_1,
+     +     D,E,F,yv,yp,qp,sp,kxm,kzm,p2,
+     +     xlh,xuh,reda,redb,redc,redr,Ra,0.d0,1.d0)
+       call mpighostup(p2)
+       call prinf_helmv (p1,t_1,Du,Eu,Fu,yp,yv,
+     +     kxm,kzm,u1,v1,w1,xlhu,xuhu,redau,redbu,redcu,redru,Ra )
+       call prinf_helmv (p2,t_1,Du,Eu,Fu,yp,yv,
+     +     kxm,kzm,u2,v2,w2,xlhu,xuhu,redau,redbu,redcu,redru,Ra )
+       call mpighostdown(u_1)
+       call mpighost1(u1)
+       call mpighost1(u2)
+       call mpighost1(v1)
+       call mpighost1(v2)
+       call mpighost1(w1)
+       call mpighost1(w2)
+
+* Compute velocities in prinf case
+c       call boundary(u_1,v_1,w_1)
+#endif
+
 c Mean pressure gradient
 c      tauw=2.d0*invRe  (for laminar flow only with center velocity)
 c  for turbulent flow with friction velocity:
@@ -479,6 +536,23 @@ ctime       ttot0=etime(tdat0)
 
 #endif
 
+ccc    JJJJJJ
+ccc    This used to be an initial test
+ccc    Everything looks ok
+c       call prinf_helmp (t_1,D,E,F,yv, kxm,kzm,p,l,
+c     +     xlh,xuh,reda,redb,redc,redr,Ra )
+c       call savefield(p,'p',itime,rtime)
+c
+c       call prinf_helmu (p,t_1,Dv,Ev,Fv,yp,
+c     +     kxm,kzm,u_1,
+c     +     v_1,w_1,
+c     +     l,xlhv,xuhv,redav,redbv,redcv,redrv,Ra )
+c       call savefield(u_1,'u',itime,rtime)
+c       call savefield(v_1,'v',itime,rtime)
+c      call savefield(w_1,'w',itime,rtime)
+ccc    JJJJJJ
+
+
 ***********   MAIN LOOP  **************************
 
 ctime      tglob0=etime(gdat0)
@@ -510,6 +584,27 @@ c Time-advancement over 3 substeps
 
 ctime       ttot0=etime(tdat0)
 *   Lu_1, Lv_1, Lw_1  are used as temporary workspace in conv
+#ifdef PRINF
+* Compute pressure in prinf case
+       call prinf_helmp (t_1,
+     +     D,E,F,yv,yp,qp,sp,kxm,kzm,p,
+     +     xlh,xuh,reda,redb,redc,redr,Ra,0.d0,0.d0 )
+       call mpighostup(p)
+* Compute velocities in prinf case
+       call prinf_helmu (p,t_1,Du,Eu,Fu,yp,yv,
+     +     kxm,kzm,u_1,
+     +     v_1,w_1,
+     +     xlhu,xuhu,redau,redbu,redcu,redru,Ra )
+       call mpighost3(u_1)
+
+       call prinf_influence (u_1,v_1,
+     +            w_1,p,
+     +            u1,u2,v1,v2,w1,w2,p1,p2,yp,yv,mm,nn)
+       call mpighost3(u_1)
+       call mpighostup(p)
+
+       call boundary(u_1,v_1,w_1)
+#else
 
        call conv (uo,vo,wo,
      &   yv,mm,nn,Nu_1,Nv_1,Nw_1,
@@ -553,8 +648,6 @@ c       Omega = Omega - dt*50000
        call add_star_forcing(u_1,dt,
      +    alfa,beta,gamma,zeta,l,u_1,tauw)
 
-
-
 #ifdef TEMPERATURE
 *  Add temperature contribution to vertical velocity
        call add_star_temp(v_1,dt,
@@ -571,8 +664,6 @@ c BUOYT is Pr*Le*Rt   for salt fingers
 
 c BUOYS is Pr*Le*Rs for the SF problem  
 #endif
-
-        
 
 ctime       ttot1=etime(tdat)
 ctime       print *,'Vstr: t:',ttot1-ttot0,' u:',tdat(1)-tdat0(1),
@@ -625,9 +716,10 @@ ctime       ttot1=etime(tdat)
 ctime       print *,'Vel : t:',ttot1-ttot0,' u:',tdat(1)-tdat0(1),
 ctime     &              ' s:',tdat(2)-tdat0(2)
 
+! not PRINF
+#endif 
 ***   Enforce vertical boundary conditions   ***
        call boundary(u_1,v_1,w_1)
-
 
 #ifdef TEMPERATURE
 *     For temperature we do not use the index switching trick
@@ -675,8 +767,6 @@ c       call savefield(s_1,'a',idbg)
 #endif
 
           idbg=idbg+1
-
-
 
 ***** This part used to be at the beginning of the loop
 ***** we do it here so that we end the loop with valid
@@ -771,6 +861,11 @@ c Save the spectral velocity fields
        call savefield(u_1,'u',itime,rtime)
        call savefield(v_1,'v',itime,rtime)
        call savefield(w_1,'w',itime,rtime)
+       call savefield(p,'p',itime,rtime) ! For diagnostics, to be removed
+
+!       call prinf_checkdiv(u_1,v_1,
+!     &     w_1,uv,yp,yv,mm,nn)
+!       call savefield(uv,'d',itime,rtime)
 
 #ifdef TEMPERATURE
        call savefield(t_1,'t',itime,rtime)
@@ -870,7 +965,7 @@ cmpi      include 'mpif.h'
          eny=eny/(2*Nx*Ny*Nz)
          enz=enz/(2*Nx*Ny*Nz)
        
-         write(*,'(i7,x,f11.6,x,a4,x,3f9.6,x,a4,x,3e13.5)') 
+         write(*,'(i7,x,e13.5,x,a4,x,3f9.6,x,a4,x,3e13.5)') 
      &         t,rtime,'CFL:',cflx,cfly,cflz,'ENE:',enx,eny,enz
 
 	if(cfly.gt.0.5) then

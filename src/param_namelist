@@ -1,7 +1,7 @@
 &NUMERIC
       ptan=1.7    ! Geometric grid stretching factor
       qtan=1.5    ! Geometric grid stretching factor
-      dt=1e-6     ! Timestep 
+      dt=1e-7     ! Timestep 
       ttot=50000  ! Total number of steps to run
       nsave=250   ! Ho often to save in steps
       alfa=0.0d0,0.066666666666d0,0.166666666666d0             ! Timestepping coefficients 

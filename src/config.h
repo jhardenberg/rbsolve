@@ -1,4 +1,3 @@
-#define ONLY2D
 !* This version of the code has an active scalar S */
 !* if used for salt fingers define Rt,Rs,Le,Pr (Ra is not used) */
 !**********************************
@@ -14,6 +13,9 @@
 !**************************
 !*   PHYSICS              *
 !**************************
+
+!* Infinite Prandtl. Use only with NO-SLIP
+#define PRINF
 
 !* Convective code *
 #define TEMPERATURE
@@ -35,8 +37,8 @@
 
 !* Velocities: NO SLIP is the default, 
 !*  uncomment these for free slip instead   
-#define FREE_SLIP_TOP
-#define FREE_SLIP_BOTTOM
+!#define FREE_SLIP_TOP
+!#define FREE_SLIP_BOTTOM
 
 !* Dirichlet boundary conditions. Comment to leave free *
 

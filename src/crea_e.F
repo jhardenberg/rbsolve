@@ -12,6 +12,7 @@ c ______________________________________________________________________
          E(:,:,j)=-(K2(:,:)+2.d0*rp(j+Nybase))
       enddo
 
+c Impose zero gradient at top and bottom
       if(iam.eq.1) then
         E(:,:,1)=E(:,:,1)+2.d0*qp(1)
       endif
