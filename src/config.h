@@ -15,7 +15,7 @@
 !**************************
 
 !* Infinite Prandtl. Use only with NO-SLIP
-#define PRINF
+!-#define PRINF
 
 !* Convective code *
 #define TEMPERATURE
