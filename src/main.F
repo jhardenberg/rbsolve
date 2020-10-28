@@ -402,7 +402,7 @@ c	Diagnostics
 c Read in parameters from files
 
       call read_para(1)
-      ttot=ttot+itime
+      ndt=ndt+itime
 c Computation of wave vector arrays 
 
       call Crea_wave(kxm,kzm,K2,mm,nn,kxmin,kzmin)
@@ -486,7 +486,7 @@ ctime      tglob0=etime(gdat0)
 
 
 	idbg=0
-      do while(itime.le.ttot) 
+      do while(itime.le.ndt) 
 
 c      if(iam.eq.1) print *,' t=',itime
 
@@ -504,6 +504,14 @@ c Time-advancement over 3 substeps
 
 #ifdef TEMPERATURE
        call diffus (t_1,TDIFF,qv,rv,sv,K2,Lt_1)
+#endif
+
+#ifdef RADIATION
+        call add_radiation(Lt_1,qrad)
+#endif
+
+#ifdef LAPSERATE
+        call add_lapse(Lt_1,v_1,lapse)
 #endif
 
 ***   Compute advective/convective terms   ***

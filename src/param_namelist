@@ -22,4 +22,6 @@
       Le=3.d0                 ! Lewis number (FINGER)
       Omegay=0.d0             ! Rotation component y direction
       Omegaz=0.d0             ! Rotation component z direction
+      lapse=0.d0
+      qrad=1.d0
 &END

@@ -66,3 +66,41 @@ c Calcolo il termine diffusivo
      
        return
        end 
+
+
+#ifdef LAPSERATE
+      subroutine add_lapse (Lt_n,v_1,lapse)
+
+#include "param.h"
+
+      complex*16 Lt_n(nwax+1,2*nwaz+1,0:Nyl+1)
+      complex*16 v_1(nwax+1,2*nwaz+1,0:Nyl+1)
+      real*8 lapse
+
+      do j=Nylmin,Nylmax
+         Lt_n(:,:,j)= Lt_n(:,:,j)-lapse*v_1(:,:,j)
+      enddo
+
+      return
+      end
+#endif
+
+
+#ifdef RADIATION
+      subroutine add_radiation (Lt_n,qrad)
+
+#include "param.h"
+
+      complex*16 Lt_n(nwax+1,2*nwaz+1,0:Nyl+1)
+      real*8 qrad
+
+      do j=Nylmin,Nylmax
+       Lt_n(1,1,j)= Lt_n(1,1,j)-qrad
+      enddo
+
+      return
+      end
+#endif
+
+
+

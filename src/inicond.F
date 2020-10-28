@@ -18,15 +18,7 @@ c	perturbed with white noise on all wavenumbers
 
       character cc*1,str*30
 
-      real*8 ptan,qtan,ran2
-      real*8 DD,Lx,Lz,Re,invRe,dt,dx,dz
-      real*8 kxmin,kzmin,Ra,Kscalar,Pr
-
-      integer*4 nsave,ttot
-      real*8 alfa(3),beta(3),gamma(3),zeta(3)
-
-      common/ALLPARA/ptan,qtan,DD,Re,Lx,Lz,invRe,dt,dx,dz,
-     +   kxmin,kzmin,nsave,ttot,alfa,beta,gamma,zeta,Ra,Kscalar,Pr
+#include "allpara.h"
 
       real*8 A(nwax+1,2*nwaz+1)
       real*8 kxm(nwax+1),kzm(2*nwaz+1)
@@ -34,7 +26,7 @@ c	perturbed with white noise on all wavenumbers
       real*8 K2(nwax+1,2*nwaz+1)
 
       integer ik,idum,l
-      real*8 b,c,K0,sigmaL,mediaL
+      real*8 b,c,K0,sigmaL,mediaL,ran2
       real*8 T_L((Ny+1)/2),B_L((Ny+1)/2),rr,ReT,ImT,ampl
       real*8 pi2
       parameter (pi2=6.28318530717959d0)
@@ -91,9 +83,11 @@ c     Crea lo spettro verticale (una gaussiana)
 
         print *,l
         do j=1,Ny
-
-          T_L(l)=dsin(l*pi2*yv(j))
-
+#ifndef PRANDTL
+        T_L(l)=dsin(l*pi2*yv(j))
+#else
+        T_L(l)=1
+#endif
           do i=1,nwax+1
             do k=1,2*nwaz+1
               rr=ran2(idum)
@@ -104,10 +98,27 @@ c     Crea lo spettro verticale (una gaussiana)
           enddo
         enddo
       enddo
+#ifndef PRANDTL
       do j=1,Ny
           t(1,1,j)=(yv(j)/DD+DD/2)*
-     & (TEMPERATURE_TOP-TEMPERATURE_BOTTOM)+TEMPERATURE_BOTTOM      
+     & (TEMPERATURE_TOP-TEMPERATURE_BOTTOM)+TEMPERATURE_BOTTOM
       enddo
+#else
+c     divido il profilo di T per troposfera e  stratosfera     
+#ifdef HTROPO
+      do j=1,Ntropo
+          t(1,1,j)=(0.5*(Pr*Re)*yv(j)**2)-FLUXT_BOTTOM*yv(j)+1
+      enddo
+      do j=Ntropo+1,Ny
+          t(1,1,j)=t(1,1,Ntropo)
+      enddo
+#else
+      do j=1,Ny
+          print *,yv(j)
+          t(1,1,j)=(0.5*(Pr*Re)*(yv(j)+0.5)**2)-FLUXT_BOTTOM*(yv(j)+0.5)
+      enddo
+#endif
+#endif
       call savefield(t,'t',0,0.d0)
   
       end
