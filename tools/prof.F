@@ -78,27 +78,42 @@ c RB output files
 
 	  do it=istart,iend,istep
 
-	     if(cc.ne.'b') then
+	     if(cc.eq.'b') then
+                call readfield(u,'t',it)
+                call Fourier1 (u,uo)
+                call readfield(v,'s',it)
+                call Fourier1 (v,vo)
+                do j=1,Ny
+                 do k=1,Nz
+                  do i=1,Nx
+                    uo(i,k,j)=uo(i,k,j)*rr-vo(i,k,j)
+                  enddo
+                 enddo
+                enddo
+                do j=1,Ny
+                  xmean(j)=u(1,1,j)*rr-v(1,1,j)
+                enddo
+             elseif(cc.eq.'e') then
+                call readfield(u,'u',it)
+                call Fourier1 (u,uo)
+                call readfield(v,'w',it)
+                call Fourier1 (v,vo)
+                uo(:,:,:)=uo(:,:,:)*uo(:,:,:)+vo(:,:,:)*vo(:,:,:)
+                do j=1,Ny      
+                   xmean(j)=0.0
+                   do k=1,Nz
+                      do i=1,Nx
+                          xmean(j)=xmean(j)+uo(i,k,j)
+                      enddo
+                   enddo
+                   xmean(j)=xmean(j)/(Nx*Nz)
+	        enddo
+             else
                 call readfield(u,cc,it)
                 call Fourier1 (u,uo)
                 do j=1,Ny      
                   xmean(j)=u(1,1,j)
-	        enddo
-	     else
-                call readfield(u,'t',it)
-                call Fourier1 (u,uo)
-		call readfield(v,'s',it)
-                call Fourier1 (v,vo)
-                do j=1,Ny      
-                 do k=1,Nz
-                  do i=1,Nx
-                    uo(i,k,j)=uo(i,k,j)*rr-vo(i,k,j)
-	          enddo
-	         enddo
-                enddo
-                do j=1,Ny      
-                  xmean(j)=u(1,1,j)*rr-v(1,1,j)
-	        enddo
+               enddo
 	     endif
               
              do j=1,Ny      
