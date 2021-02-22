@@ -8,7 +8,7 @@ C Horizontal Energy spectrum
       complex*16 u(nwax+1,2*nwaz+1,0:Nylmem+1)
       complex*16 v(nwax+1,2*nwaz+1,0:Nylmem+1)
       complex*16 w(nwax+1,2*nwaz+1,0:Nylmem+1)
-      real*8 ss(Nx),ssx(Nx),ssy(Nx)
+      real*8 ss(Nx),ssx(Nx),ssy(Nx), ss3d(Nx/2+1,Ny)
       real*8 umax,umin,dk
       real*8 vmax,vmin
       real xmin,xmax
@@ -31,9 +31,8 @@ C Horizontal Energy spectrum
       real*8 kxm(nwax+1),kzm(2*nwaz+1),pwr
       complex*16 mm(nwax+1),nnn(2*nwaz+1)
       real*8 K2(nwax+1,2*nwaz+1),dum,rt,rs,rr
-	integer ik
-
-
+      integer ik
+      logical f3d
 
 #ifndef NOMPI 
       print *,"Please compile with the NOMPI option!"
@@ -41,6 +40,7 @@ C Horizontal Energy spectrum
 #endif      
 
       iam=1
+      f3d=.false.
 
       if(iargc().lt.3) then
          print *, 'Usage: spectrumh cc y istart [iend istep]'
@@ -91,51 +91,63 @@ c  use x scale as granularity
 
 	sum=0.
 
-	    do i=1,4
-              do k=1,4
-   	        ik=sqrt(K2(i,k))/dk+1.5
-	        print *,i-1,k-1,ik
-	   
-	       enddo
-	    enddo
-
       do i=1,Nx
 	ss(i)=0
+        nn(i)=0
       enddo
       do it=istart,iend,istep
 
-         if(cc.eq.'e') then
+       if(cc.eq.'e') then
              call readfield(u,'u',it)
              call readfield(w,'w',it)
-!             call readfield(v,'v',it)
+             call readfield(v,'v',it)
          
-	if(jj.le.0) then
+	if(jj.lt.0) then
 c	Sum over shells
 	 do j=-jj,Ny+1+jj
            do i=1,nwax+1
               do k=1,2*nwaz+1
    	 	 ik=sqrt(K2(i,k))/dk+1.5
                  pwr=dreal(dconjg(u(i,k,j))*u(i,k,j))+
-     &	 dreal(dconjg(w(i,k,j))*w(i,k,j))
-!     &	 dreal(dconjg(v(i,k,j))*v(i,k,j))+
+     &	 dreal(dconjg(w(i,k,j))*w(i,k,j))+
+     &	 dreal(dconjg(v(i,k,j))*v(i,k,j))
                  ss(ik)=ss(ik)+pwr
                  nn(ik)=nn(ik)+1
 	      enddo
            enddo
 	sum=sum+1
 	  enddo
+        elseif(jj.eq.0) then
+          f3d=.true.
+          do j=1,Ny
+           ss(:)=0.0
+           nn(:)=0
+           do i=1,nwax+1
+              do k=1,2*nwaz+1
+                 ik=sqrt(K2(i,k))/dk+1.5
+                 pwr=dreal(dconjg(u(i,k,j))*u(i,k,j))+
+     &  dreal(dconjg(w(i,k,j))*w(i,k,j))+
+     &  dreal(dconjg(v(i,k,j))*v(i,k,j))
+                 ss(ik)=ss(ik)+pwr
+                 nn(ik)=nn(ik)+1
+              enddo
+           enddo
+           do i=1,Nx/2+1
+              ss3d(i,j)=ss(i)/nn(i)*(i-1)
+           enddo
+         enddo
 	else
 	    do i=1,nwax+1
               do k=1,2*nwaz+1
                  ik=sqrt(K2(i,k))/dk+1.5
 	         pwr=dreal(dconjg(u(i,k,jj))*u(i,k,jj))+
-     &	 dreal(dconjg(w(i,k,jj))*w(i,k,jj))
-!     &	 dreal(dconjg(v(i,k,jj))*v(i,k,jj))+
+     &	 dreal(dconjg(w(i,k,jj))*w(i,k,jj))+
+     &	 dreal(dconjg(v(i,k,jj))*v(i,k,jj))
                  ss(ik)=ss(ik)+pwr
                  nn(ik)=nn(ik)+1
               enddo
            enddo
-	sum=sum+1
+	   sum=sum+1
 	endif
        else
 c if cc ne e
@@ -188,21 +200,32 @@ c       Sum over shells
            enddo
         sum=sum+1
         endif
-
 	endif
 
       enddo
+      
+      if (f3d) then
+        call makenamebob(file0,cc,istart,'.s3d')
+        open(unit=20,file=file0,form='formatted')
+        do j=1,Ny
+         do i=1,Nx/2+1
+           write(20,'(i5,x,i5,x,2e16.8)') (i-1),j,ss3d(i,j)
+         enddo
+        enddo
+        close(20)
 
-      call makenamebob(file0,cc,istart,'.spe')
-      open(unit=20,file=file0,form='formatted')
-      do i=2,Nx/2+1
-	sum=sum+ss(i)
-      enddo
-      sum=sum*Nx*Nx
-      do i=1,Nx/2+1
+      else
+        call makenamebob(file0,cc,istart,'.spe')
+        open(unit=20,file=file0,form='formatted')
+        do i=2,Nx/2+1
+  	  sum=sum+ss(i)
+        enddo
+        sum=sum*Nx*Nx
+        do i=1,Nx/2+1
            write(20,'(i5,2e16.8)') (i-1),ss(i)/nn(i)*(i-1),sum
-      enddo
-      close(20)
+        enddo
+        close(20)
+      endif
 
       end
 
