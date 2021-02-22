@@ -45,7 +45,9 @@ C Horizontal Energy spectrum
       if(iargc().lt.3) then
          print *, 'Usage: spectrumh cc y istart [iend istep]'
 	 print *,'Computes the horizontal spectrum of variable yy'
-	 print *, 'y<=0 means all levels'
+	 print *, 'y<0 means: compute from level -y to Ny+1+y'
+         print *, '(y=-1 means all levels)'
+	 print *, 'y=0 means compute a 2D spectrum on each level'
          stop
       endif
       call slice()
