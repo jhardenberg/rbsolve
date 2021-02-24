@@ -31,7 +31,7 @@ C Horizontal Energy spectrum
       real*8 kxm(nwax+1),kzm(2*nwaz+1),pwr
       complex*16 mm(nwax+1),nnn(2*nwaz+1)
       real*8 K2(nwax+1,2*nwaz+1),dum,rt,rs,rr
-      integer ik
+      integer ik,nstep
       logical f3d
 
 #ifndef NOMPI 
@@ -92,6 +92,8 @@ c  use x scale as granularity
       endif
 
 	sum=0.
+        ss3d(:,:)=0.
+        nstep=0
 
       do i=1,Nx
 	ss(i)=0
@@ -135,8 +137,9 @@ c	Sum over shells
               enddo
            enddo
            do i=1,Nx/2+1
-              ss3d(i,j)=ss(i)/nn(i)*(i-1)
+              ss3d(i,j)=ss3d(i,j)+ss(i)/nn(i)*(i-1)
            enddo
+           nstep=nstep+1
          enddo
 	else
 	    do i=1,nwax+1
@@ -211,7 +214,7 @@ c       Sum over shells
         open(unit=20,file=file0,form='formatted')
         do j=1,Ny
          do i=1,Nx/2+1
-           write(20,'(i5,x,i5,x,2e16.8)') (i-1),j,ss3d(i,j)
+           write(20,'(i5,x,i5,x,2e16.8)')(i-1),j,ss3d(i,j)/nstep
          enddo
         enddo
         close(20)
