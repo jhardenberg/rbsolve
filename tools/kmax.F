@@ -150,8 +150,8 @@ c  we want int(E(k)dk) = var
 	  ssmax=0.
 
           imode=0
-          do i=2,Nx/2+1
-c            print *,i-1,ss(i)
+          do i=2,kx/2+1
+            print *,i-1,ss(i)
             if(ss(i).gt.ssmax) then
                         ssmax=ss(i)
                         lmax=Lx/(i-1)
@@ -161,7 +161,7 @@ c            print *,i-1,ss(i)
             sum=sum+ss(i)
           enddo
           sumpp=0.
-          do i=2,Nx/2+1
+          do i=2,kx/2+1
             sumpp=sumpp+ss(i)
 	    sump(i)=sumpp
             if(sumpp.lt.sum*0.5) imode=i
