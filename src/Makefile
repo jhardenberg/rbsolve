@@ -10,7 +10,7 @@ OMPI_F77 =      gfortran
 
 F77COMP	=	gfortran
 LINKER =	gfortran
-CFLAGS =       -O3 -ffixed-line-length-none 
+CFLAGS =       -O3 -ffixed-line-length-none -mcmodel=large
 #LDFLAGS        =   -static -lrfftw -lfftw   -lm
 #LDFLAGS        =  -L/usr/local/Cellar/fftw/3.3.8_1/lib/  -lfftw3 -lm
 LDFLAGS        =  -L/usr/local/lib  -lfftw3 -lm
@@ -143,6 +143,10 @@ extr: $(FLUX_OBJ)
 FLUXV_OBJ    =       fluxv.o fourier1.o fourier1_tmpt.o tools.o salva.o
 fluxv: $(FLUXV_OBJ)
 	$(COMP)  $(CFLAGS) -D"NOMPI"  -o fluxv $(FLUXV_OBJ) $(LDFLAGS)
+
+COHERENCE_OBJ    =      coherence.o tools.o salva.o
+coherence: $(COHERENCE_OBJ)
+	$(COMP)  $(CFLAGS) -D"NOMPI"  -o coherence $(COHERENCE_OBJ) $(LDFLAGS)
 
 SPECTRUMH_OBJ    =       spectrumh.o tools.o salva.o
 spectrumh: $(SPECTRUMH_OBJ)
@@ -311,6 +315,7 @@ sectionz.o: config.h param.h
 slice.o: config.h param.h
 spectrumh.o: config.h param.h
 spectrumx.o: config.h param.h
+coherence.o: config.h param.h
 spectrumt.o: config.h param.h
 tn_poiss.o: config.h param.h
 tn_prinf_helmp.o: config.h param.h
