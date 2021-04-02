@@ -1,5 +1,5 @@
 #include "config.h"
-
+#ifdef PRINF
 c ______________________________________________________________________
 
       subroutine TN_prinf_helmu (p,t,yp,yv,kxm,kzm,TNU,TNV,TNW,Ra)
@@ -100,4 +100,4 @@ c CHECK +1 and -1!
       return
       end
 
-
+#endif

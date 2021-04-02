@@ -1,5 +1,6 @@
 #include "config.h"
 
+#ifdef PRINF
 c ______________________________________________________________________
       subroutine TN_prinf_helmp (t,yv,yp,qp,sp,kxm,kzm,TN,Ra,pbot,ptop)
 							      
@@ -51,3 +52,4 @@ c ______________________________________________________________________
 
       return
       end
+#endif
