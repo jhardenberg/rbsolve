@@ -63,6 +63,19 @@ c vertical sections (at fixed z)
                  enddo
                enddo
           enddo
+        elseif(cc=='f') then
+         call readfield(u,'v',it)
+         call Fourier1 (u,uo)
+         call readfield(t,'t',it)
+         call Fourier1 (t,to)
+         to(1,1,:)=0.0
+         do j=1,Ny
+               do k=1,Nz
+                 do i=1,Nx
+                   uo(i,k,j)=uo(i,k,j)*to(i,k,j)
+                 enddo
+               enddo
+         enddo
         else
          call readfield(u,cc,it)
          call Fourier1 (u,uo)
