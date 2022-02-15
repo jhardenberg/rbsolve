@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/92587374.svg)](https://zenodo.org/badge/latestdoi/92587374)
+
 # RBsolve
 ## Pseudospectral Rayleigh-Bénard Solver
 
