@@ -10,7 +10,7 @@ OMPI_F77 =      gfortran
 
 F77COMP	=	gfortran
 LINKER =	gfortran
-CFLAGS =       -O3 -ffixed-line-length-none -mcmodel=large
+CFLAGS =       -O3 -ffixed-line-length-none -mcmodel=large -std=legacy
 #LDFLAGS        =   -static -lrfftw -lfftw   -lm
 #LDFLAGS        =  -L/usr/local/Cellar/fftw/3.3.8_1/lib/  -lfftw3 -lm
 LDFLAGS        =  -L/usr/local/lib  -lfftw3 -lm
