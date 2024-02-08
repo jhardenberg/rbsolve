@@ -130,6 +130,15 @@ c TEMPERATURE boundary condition
          tt(:,:,0)=tt(:,:,2)
       endif
 #endif
+
+#ifdef MIXED_BOTTOM
+* Prescribed mixed flux conditions at bottom
+      if(iam.eq.1) then
+         tt(:,:,0)=tt(:,:,2)
+         tt(1,1,0)=tt(1,1,2)+(MIXED_BOTTOM*tt(1,1,1) + MIXED_BOTTOM_CONST)*(yv(2)-yv(0))
+      endif
+#endif
+
 #endif
 
 
@@ -154,13 +163,19 @@ c TEMPERATURE boundary condition
          tt(:,:,Nyl+1)=tt(:,:,Nyl-1)
       endif
 #endif
+
+#ifdef MIXED_TOP
+* Prescribed mixed flux conditions at top
+      if(iam.eq.NPROC) then
+         tt(:,:,Nyl+1)=tt(:,:,Nyl-1)
+         tt(1,1,Nyl+1)=tt(1,1,Nyl-1)-(MIXED_TOP*tt(1,1,Nyl) + MIXED_TOP_CONST)*(yv(Ny+1)-yv(Ny-1))
+      endif
 #endif
 
       return
       end
   
 #endif
-
 
 #ifdef SALINITY
 
