@@ -1,10 +1,10 @@
 # Makefile for RB/Navier Stokes code
 
 #Comment this line for MPI
-NOMPI = 0
+#NOMPI = 1
 
 MPIF77COMP = mpif77
-OMPI_F77 =      gfortran
+OMPI_F77 =   ifort
 
 #Gfortran
 
