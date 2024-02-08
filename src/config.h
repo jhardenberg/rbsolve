@@ -42,8 +42,8 @@
 
 !* Dirichlet boundary conditions. Comment to leave free *
 
-!* #define TEMPERATURE_BOTTOM 0.5d0
-!* #define TEMPERATURE_TOP -0.5d0
+!-#define TEMPERATURE_BOTTOM 1.0d0
+!-#define TEMPERATURE_TOP 0.0d0
 
 !* Temperature Flux boundary conditions. *
 
