@@ -142,8 +142,9 @@ c TEMPERATURE boundary condition
          tt(:,:,0)=tt(:,:,2)
          tt(1,1,0)=tt(1,1,2)+(MIXEDT_BOTTOM*tt(1,1,1) +
      &   MIXEDT_BOTTOM_CONST)*(yv(2)-yv(0))
-      endif
 #endif
+      endif
+
 #endif
 
 #endif
@@ -181,8 +182,9 @@ c TEMPERATURE boundary condition
          tt(:,:,Nyl+1)=tt(:,:,Nyl-1)
          tt(1,1,Nyl+1)=tt(1,1,Nyl-1) - (MIXEDT_TOP*tt(1,1,Nyl) + 
      &   MIXEDT_TOP_CONST)*(yv(Ny+1)-yv(Ny-1))
-      endif
 #endif
+      endif
+
 #endif
 
 #endif
