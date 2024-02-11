@@ -51,8 +51,8 @@
 #define FLUXT_BOTTOM (1.d0)
 !-#define NOFLUXT_BOTTOM
 
-#define MIXED_TOP (100.0)
-#define MIXED_TOP_CONST (1.0)
+#define MIXEDT_TOP (100.0)
+#define MIXEDT_TOP_CONST (1.0)
 
 !-#define FLUXT_TOP (1.d0)
 !-#define FLUXT_TOP (0.d0)

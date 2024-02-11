@@ -131,13 +131,21 @@ c TEMPERATURE boundary condition
       endif
 #endif
 
-#ifdef MIXED_BOTTOM
+#ifdef MIXEDT_BOTTOM
 * Prescribed mixed flux conditions at bottom
       if(iam.eq.1) then
+#ifdef PATTERNT_BOTTOM
+* Temperature flux pattern at bottom          
+         tt(:,:,0)=tt(:,:,2) + tbot(:,:)*(yv(2)-yv(0))
+         tt(1,1,0)=tt(1,1,0) + MIXEDT_BOTTOM*tt(1,1,1)*(yv(2)-yv(0))
+#else
          tt(:,:,0)=tt(:,:,2)
-         tt(1,1,0)=tt(1,1,2)+(MIXED_BOTTOM*tt(1,1,1) + MIXED_BOTTOM_CONST)*(yv(2)-yv(0))
+         tt(1,1,0)=tt(1,1,2)+(MIXEDT_BOTTOM*tt(1,1,1) +
+     &   MIXEDT_BOTTOM_CONST)*(yv(2)-yv(0))
       endif
 #endif
+#endif
+
 #endif
 
 #ifdef FLUXT_TOP
@@ -162,13 +170,21 @@ c TEMPERATURE boundary condition
       endif
 #endif
 
-#ifdef MIXED_TOP
+#ifdef MIXEDT_TOP
 * Prescribed mixed flux conditions at top
       if(iam.eq.NPROC) then
+#ifdef PATTERNT_TOP
+* Temperature flux pattern at top
+         tt(:,:,Nyl+1)=tt(:,:,Nyl-1) - ttop(:,:)*(yv(Ny+1)-yv(Ny-1))
+         tt(1,1,Nyl+1)=tt(1,1,Nyl-1) - MIXEDT_TOP*tt(1,1,Nyl)*(yv(Ny+1)-yv(Ny-1))
+#else
          tt(:,:,Nyl+1)=tt(:,:,Nyl-1)
-         tt(1,1,Nyl+1)=tt(1,1,Nyl-1)-(MIXED_TOP*tt(1,1,Nyl) + MIXED_TOP_CONST)*(yv(Ny+1)-yv(Ny-1))
+         tt(1,1,Nyl+1)=tt(1,1,Nyl-1) - (MIXEDT_TOP*tt(1,1,Nyl) + 
+     &   MIXEDT_TOP_CONST)*(yv(Ny+1)-yv(Ny-1))
       endif
 #endif
+#endif
+
 #endif
 
       return
@@ -177,13 +193,10 @@ c TEMPERATURE boundary condition
 #endif
 
 #ifdef SALINITY
-
       subroutine boundary_scalar (tt,yv)
 c SALINITY boundary condition
 
-
 #include "param.h"
-
 
       complex*16 tt(nwax+1,2*nwaz+1,0:Nylmem+1)
       real*8 yv(0:Ny+1)
