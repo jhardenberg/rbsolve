@@ -68,7 +68,7 @@
 
 !* Non-homogeneous Temperature boundary conditions (Dirichlet or flux)
 !-#define PATTERNT_BOTTOM
-#define PATTERNT_TOP
+!-#define PATTERNT_TOP
 
 !**************************
 !* Technical code options *
