@@ -42,14 +42,17 @@
 
 !* Dirichlet boundary conditions. Comment to leave free *
 
-#define TEMPERATURE_BOTTOM 0.5d0
-#define TEMPERATURE_TOP -0.5d0
+!-#define TEMPERATURE_BOTTOM 1.0d0
+!-#define TEMPERATURE_TOP 0.0d0
 
 !* Temperature Flux boundary conditions. *
 
 !-#define FLUXT_BOTTOM (Re*Pr) 
-!-#define FLUXT_BOTTOM (1.d0)
+#define FLUXT_BOTTOM (1.d0)
 !-#define NOFLUXT_BOTTOM
+
+#define MIXEDT_TOP (100.0)
+#define MIXEDT_TOP_CONST (1.0)
 
 !-#define FLUXT_TOP (1.d0)
 !-#define FLUXT_TOP (0.d0)

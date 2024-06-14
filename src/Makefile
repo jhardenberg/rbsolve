@@ -1,16 +1,16 @@
 # Makefile for RB/Navier Stokes code
 
 #Comment this line for MPI
-NOMPI = 1
+#NOMPI = 1
 
 MPIF77COMP = mpif77
-OMPI_F77 =      gfortran
+OMPI_F77 =   ifort
 
 #Gfortran
 
 F77COMP	=	gfortran
 LINKER =	gfortran
-CFLAGS =       -O3 -ffixed-line-length-none -mcmodel=large -std=legacy
+CFLAGS =       -O3 -ffixed-line-length-none -mcmodel=large
 #LDFLAGS        =   -static -lrfftw -lfftw   -lm
 #LDFLAGS        =  -L/usr/local/Cellar/fftw/3.3.8_1/lib/  -lfftw3 -lm
 LDFLAGS        =  -L/usr/local/lib  -lfftw3 -lm
@@ -29,10 +29,13 @@ FFTWDIR  = ${FFTW_LIBDIR}
 
 # Intel Fortran Compiler
 
-#F77COMP =       ifort
-#LINKER =        ifort
-#CFLAGS =        -O3   -no-prec-div -mcmodel=medium -shared-intel
-#LDFLAGS =  -lfftw3  -lm farg.o  -L ${FFTWDIR}
+F77COMP =       ifort
+LINKER =        ifort
+CFLAGS =        -O3   -no-prec-div -mcmodel=medium -shared-intel -march=core-avx2
+#CFLAGS =        -O3   -no-prec-div -mcmodel=large -shared-intel -march=core-avx2
+CFLAGS =         -Ofast -132 -ipo -mcmodel=medium  -shared-intel -march=core-avx2 -no-prec-div -fma -ftz -fomit-frame-pointer -align array64byte
+LDFLAGS =  -lfftw3  -lm farg.o  -L ${FFTWDIR} 
+LDFLAGS =  -lfftw3  -lm  -L ${FFTWDIR} 
 #LDFLAGS =  -lfftw3   -L ${FFTWDIR}
 
 
