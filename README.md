@@ -34,13 +34,13 @@ The file `config.h` contains options which define the physical structure of the 
 * `ONLY2D`:  If you want a 2D problem.  This option reduces the 3D domain to a 2D one using x and y directions. Remember to set also `kzmax=1` in `param.h`	
 * `TEMPERATURE`: if defined, a convective problem is solved (RB). Else the Navier-Stokes equations are solved.
 * `FINGER, SALINITY`: to run a salt fingering experiment. `SALINITY` adds the second scalar, `FINGER` chooses a particular scaling of the equations.
-* `FREE_SLIP_TOP` etc. :  Choose _free slip_ velocity  conditions for top or bottom boundaries (no slip is default mode).
-* `FLUXT_BOTTOM` etc. : used to define fixed flux thermal boundary conditions.
-* `FLUXS_BOTTOM` etc. : used to define fixed flux haline boundary conditions.
-* `NOFLUX_TOP` etc.: alternative to set adiabatic boundaries. Equivalent to `FLUXT_TOP 0.d0` (bast spares one line of code).
-* `TEMPERATURE_BOTTOM` etc.: Dirichlet thermal BCs for top and bottom.
-* `SCALAR_BOTTOM` etc.: Dirichlet haline BCs for top and bottom.
-* `PATTERNT_BOTTOM` etc.: Non-homogeneous Dirichlet BC. Requires files `temperature_bottom.dat` and/or `temperature_top.dat`. 
+* `FREE_SLIP_BOTTOM`, `FREE_SLIP_TOP`:  Choose _free slip_ velocity  conditions for top or bottom boundaries (no slip is default mode).
+* `FLUXT_BOTTOM`, `FLUXT_TOP`: used to define fixed flux thermal boundary conditions.
+* `FLUXS_BOTTOM`, `FLUXS_TOP`: used to define fixed flux haline boundary conditions.
+* `NOFLUX_BOTTOM`, `NOFLUX_TOP`: alternative to set adiabatic boundaries. Equivalent to `FLUXT_TOP 0.d0` (but spares one line of code).
+* `TEMPERATURE_BOTTOM`, `TEMPERATURE_TOP`: Dirichlet thermal BCs for top and bottom.
+* `SCALAR_BOTTOM`, `SCALAR_TOP`:  Dirichlet haline BCs for top and bottom.
+* `PATTERNT_BOTTOM`, `PATTERNT_TOP`: Non-homogeneous Dirichlet BC. Requires files `temperature_bottom.dat` and/or `temperature_top.dat`. 
 * `PRESSURE_GRADIENT`: defines a mean pressure gradient (useful for NS experiments)
 
 At the bottom of config.h notice the following definitions (for the Rayleigh-Benard problem):
@@ -50,6 +50,10 @@ At the bottom of config.h notice the following definitions (for the Rayleigh-Ben
     #define TDIFF (1.d0)
 
 which imply that the problem is solved using the normalization where in the equations: `Pr` is in front of the Laplacian in the momentum equation, `Ra*Pr` is in front of the buoyancy term and thermal diffusivity is 1. That is, the equations are non-dimensionalized respect to the diffusive time scale. Other scalings (such as `PRANDTL` or `FINGER`) are possible.
+
+A clarification on the use of the options: to set Dirichlet BCs for example at the top boundary, set `TEMPERATURE_TOP` and not `FLUXT_TOP`.
+To set flux BCs for example at the top boundary, set `FLUXT_TOP` and not `TEMPERATURE_TOP`.
+To set non-homogeneous BCs read from a file you will need to set both `PATTERNT_TOP` and `TEMPERATURE_TOP`. The temperature value specified by `TEMPERATURE_TOP` is ignored.
 
 ### param.h ###
 
