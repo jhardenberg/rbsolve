@@ -117,7 +117,7 @@
       parameter (Nylmem=Ny)
       parameter  (NPROC=1)
 #else
-      parameter (Nylmem=49)
+      parameter (Nylmem=33)
       parameter  (NPROC=4)
 #endif
 
