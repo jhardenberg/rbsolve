@@ -244,7 +244,7 @@ INICONDSALT_OBJ    =       inicondsalt.o tools.o salva.o ran2.o punti.o boundary
 inicondsalt: $(INICONDSALT_OBJ)
 	$(COMP)  $(CFLAGS) -D"NOMPI"  -o inicondsalt $(INICONDSALT_OBJ) $(LDFLAGS)
 
-INICOND_OBJ    =       inicond.o tools.o salva.o salva_nc.o ran2.o punti.o boundary.F
+INICOND_OBJ    =       inicond.o tools.o salva.o salva_nc.o fourier1.o fourier2.o ran2.o punti.o boundary.F
 inicond: $(INICOND_OBJ)
 	$(COMP)  $(CFLAGS) $(NCFLAGS) -D"NOMPI"  -o inicond $(INICOND_OBJ) $(LDFLAGS) $(NCLDFLAGS)
 
