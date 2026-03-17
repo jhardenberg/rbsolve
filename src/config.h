@@ -92,7 +92,7 @@
 
 !* NetCDF4 output: all vars in one .nc file per rotation window *
 !* When defined, overrides FORMATTED_OUTPUT and UNFORMATTED output *
-!-#define NETCDF_OUTPUT
+#define NETCDF_OUTPUT
 
 !* Save pressure field in addition to velocity (and temperature/salinity) *
 !-#define SAVE_PRESSURE

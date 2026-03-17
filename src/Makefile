@@ -10,10 +10,10 @@ OMPI_F77 =      gfortran
 
 F77COMP	=	gfortran
 LINKER =	gfortran
-CFLAGS =       -O3 -ffixed-line-length-none -mcmodel=large -std=legacy
+CFLAGS =       -O3 -ffixed-line-length-none -mcmodel=small -std=legacy
 #LDFLAGS        =   -static -lrfftw -lfftw   -lm
 #LDFLAGS        =  -L/usr/local/Cellar/fftw/3.3.8_1/lib/  -lfftw3 -lm
-LDFLAGS        =  -L/usr/local/lib  -lfftw3 -lm
+LDFLAGS        =  -L/opt/homebrew/lib  -lfftw3 -lm
 
 # NetCDF-Fortran (netcdf4, compression support)
 # Adjust these paths if your installation differs
@@ -244,9 +244,9 @@ INICONDSALT_OBJ    =       inicondsalt.o tools.o salva.o ran2.o punti.o boundary
 inicondsalt: $(INICONDSALT_OBJ)
 	$(COMP)  $(CFLAGS) -D"NOMPI"  -o inicondsalt $(INICONDSALT_OBJ) $(LDFLAGS)
 
-INICOND_OBJ    =       inicond.o tools.o salva.o ran2.o punti.o boundary.F
+INICOND_OBJ    =       inicond.o tools.o salva.o salva_nc.o ran2.o punti.o boundary.F
 inicond: $(INICOND_OBJ)
-	$(COMP)  $(CFLAGS) -D"NOMPI"  -o inicond $(INICOND_OBJ) $(LDFLAGS)
+	$(COMP)  $(CFLAGS) $(NCFLAGS) -D"NOMPI"  -o inicond $(INICOND_OBJ) $(LDFLAGS) $(NCLDFLAGS)
 
 ANOMALY_OBJ    =       anomaly.o tools.o salva.o punti.o fourier1.o \
                        fourier1_tmpt.o

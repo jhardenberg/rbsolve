@@ -239,9 +239,9 @@ INICONDSALT_OBJ    =       inicondsalt.o tools.o salva.o ran2.o punti.o boundary
 inicondsalt: $(INICONDSALT_OBJ)
 	$(COMP)  $(CFLAGS) -D"NOMPI"  -o inicondsalt $(INICONDSALT_OBJ) $(LDFLAGS)
 
-INICOND_OBJ    =       inicond.o tools.o salva.o ran2.o punti.o boundary.F
+INICOND_OBJ    =       inicond.o tools.o salva.o salva_nc.o ran2.o punti.o boundary.F
 inicond: $(INICOND_OBJ)
-	$(COMP)  $(CFLAGS) -D"NOMPI"  -o inicond $(INICOND_OBJ) $(LDFLAGS)
+	$(COMP)  $(CFLAGS) $(NCFLAGS) -D"NOMPI"  -o inicond $(INICOND_OBJ) $(LDFLAGS) $(NCLDFLAGS)
 
 ANOMALY_OBJ    =       anomaly.o tools.o salva.o punti.o fourier1.o \
                        fourier1_tmpt.o
