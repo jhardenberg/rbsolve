@@ -51,6 +51,7 @@ c	perturbed with white noise on all wavenumbers
 
       rr=ran2(idum)
 
+      call initfour(0)
       call slice()
       call read_para(0)
       call Crea_wave(kxm,kzm,K2,mm,nn,kxmin,kzmin)
