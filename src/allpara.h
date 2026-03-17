@@ -4,11 +4,11 @@
       real*8 kxmin,kzmin,Ra,Kscalar,Pr,Rt,Rs,Le,Omegay,Omegaz
 
       real*8 alfa(3),beta(3),gamma(3),zeta(3) 
-      integer*4 nsave,ttot
+      integer*4 nsave,nsnc,ttot
 
       common/ALLPARA/ptan,qtan,DD,Re,Lx,Lz,invRe,dt,dx,dz,
-     +   kxmin,kzmin,nsave,ttot,alfa,beta,gamma,zeta,Ra,Kscalar,Pr,
+     +   kxmin,kzmin,nsave,nsnc,ttot,alfa,beta,gamma,zeta,Ra,Kscalar,Pr,
      +   Rt,Rs,Le,Omegay,Omegaz
 
-      namelist /numeric/ptan,qtan,dt,ttot,nsave,alfa,beta,gamma,zeta
+      namelist /numeric/ptan,qtan,dt,ttot,nsave,nsnc,alfa,beta,gamma,zeta
       namelist /phys/Lx,Lz,DD,Ra,Re,Pr,Kscalar,Rt,Rs,Le,Omegay,Omegaz
