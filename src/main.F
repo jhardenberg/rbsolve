@@ -310,6 +310,8 @@ c Read in initial condition
 #endif
       endif
 
+c Read in parameters from files
+      call read_para(1)
      
       if(itime.eq.-1) then
 c-#define READINIFILE 
@@ -438,9 +440,7 @@ c	Diagnostics
       call dealias(s_1)
 #endif
 
-c Read in parameters from files
-
-      call read_para(1)
+c Parameters were already read earlier
       ttot=ttot+itime
 c Computation of wave vector arrays 
 
