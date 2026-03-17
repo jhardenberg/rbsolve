@@ -912,7 +912,9 @@ c Save the spectral velocity fields
        call savefield(u_1,'u',itime,rtime)
        call savefield(v_1,'v',itime,rtime)
        call savefield(w_1,'w',itime,rtime)
+#ifdef SAVE_PRESSURE
        call savefield(p,'p',itime,rtime)
+#endif
 
 #ifdef TEMPERATURE
        call savefield(t_1,'t',itime,rtime)

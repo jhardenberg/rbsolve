@@ -95,7 +95,6 @@
 !-#define NETCDF_OUTPUT
 
 !* Save pressure field in addition to velocity (and temperature/salinity) *
-!* Only used when NETCDF_OUTPUT is defined (pressure is always saved in .unf mode) *
 !-#define SAVE_PRESSURE
 
 !* Let the MPI code estimate by itself CPU weights at startup *
