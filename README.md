@@ -1,5 +1,6 @@
 [![DOI](https://zenodo.org/badge/92587374.svg)](https://zenodo.org/badge/latestdoi/92587374)
 ![stand with Ukraine](https://badgen.net/badge/stand%20with/UKRAINE/?color=0057B8&labelColor=FFD700)
+[![Documentation Status](https://readthedocs.org/projects/rbsolve/badge/?version=latest)](https://rbsolve.readthedocs.io/en/latest/?badge=latest)
 
 # RBsolve
 ## Pseudospectral Rayleigh-Bénard Solver
