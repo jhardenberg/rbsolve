@@ -90,6 +90,13 @@
 !* FORMATTED or UNFORMATTED output (.dat and .unf files respectively) *
 !-#define FORMATTED_OUTPUT
 
+!* NetCDF4 output: all vars in one .nc file per rotation window *
+!* When defined, overrides FORMATTED_OUTPUT and UNFORMATTED output *
+#define NETCDF_OUTPUT
+
+!* Save pressure field in addition to velocity (and temperature/salinity) *
+!-#define SAVE_PRESSURE
+
 !* Let the MPI code estimate by itself CPU weights at startup *
 !-#define AUTO_WEIGHTS
 

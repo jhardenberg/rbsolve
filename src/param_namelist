@@ -2,8 +2,9 @@
       ptan=1.7    ! Geometric grid stretching factor
       qtan=1.5    ! Geometric grid stretching factor
       dt=1e-7     ! Timestep 
-      ttot=50000  ! Total number of steps to run
-      nsave=250   ! Ho often to save in steps
+      ttot=4000  ! Total number of steps to run
+      nsave=250   ! How often to save in steps
+      nsnc=1000  ! Switch to a new NetCDF output file every nsnc steps
       alfa=0.0d0,0.066666666666d0,0.166666666666d0             ! Timestepping coefficients 
       beta=1.533333333333d0,0.066666666666d0,0.166666666666d0
       gamma=0.533333333333d0,0.416666666666d0,0.75d0

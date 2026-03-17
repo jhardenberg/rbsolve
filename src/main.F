@@ -310,6 +310,8 @@ c Read in initial condition
 #endif
       endif
 
+c Read in parameters from files
+      call read_para(1)
      
       if(itime.eq.-1) then
 c-#define READINIFILE 
@@ -371,6 +373,23 @@ c     reads the old (antonio et al) format, works only on single cpu ....
 #endif
 
 #else
+#ifdef NETCDF_OUTPUT
+*      Read all fields from NetCDF file:
+#ifdef TEMPERATURE
+#ifdef SALINITY
+       call nc_read_all(u_1,v_1,w_1,t_1,s_1,itime)
+#else
+       call nc_read_all(u_1,v_1,w_1,t_1,itime)
+#endif
+#else
+#ifdef SALINITY
+       call nc_read_all(u_1,v_1,w_1,s_1,itime)
+#else
+       call nc_read_all(u_1,v_1,w_1,itime)
+#endif
+#endif
+#else
+*      Classic unformatted/formatted per-variable read:
        call readfield(u_1,'u',itime)
        call readfield(v_1,'v',itime)
        call readfield(w_1,'w',itime)
@@ -380,8 +399,9 @@ c     reads the old (antonio et al) format, works only on single cpu ....
 #ifdef SALINITY
        call readfield(s_1,'s',itime)
 #endif
+#endif /* NETCDF_OUTPUT */
 
-#endif
+#endif /* READOLD */
       endif
 
 #ifdef TEMPERATURE
@@ -420,10 +440,9 @@ c	Diagnostics
       call dealias(s_1)
 #endif
 
-c Read in parameters from files
-
-      call read_para(1)
-      ttot=ttot+itime
+c Parameters were already read earlier
+c ttot is now interpreted as an absolute time limit so we don't add itime
+      ! ttot=ttot+itime
 c Computation of wave vector arrays 
 
       call Crea_wave(kxm,kzm,K2,mm,nn,kxmin,kzmin)
@@ -857,23 +876,54 @@ c Save the spectral velocity fields
 
       if(mod(itime,nsave).eq.0) then
 
+#ifdef NETCDF_OUTPUT
+*      All vars saved together into the NetCDF file:
+#ifdef TEMPERATURE
+#ifdef SALINITY
+#ifdef SAVE_PRESSURE
+       call nc_save_all(u_1,v_1,w_1,t_1,s_1,p,itime,rtime)
+#else
+       call nc_save_all(u_1,v_1,w_1,t_1,s_1,itime,rtime)
+#endif
+#else
+#ifdef SAVE_PRESSURE
+       call nc_save_all(u_1,v_1,w_1,t_1,p,itime,rtime)
+#else
+       call nc_save_all(u_1,v_1,w_1,t_1,itime,rtime)
+#endif
+#endif
+#else
+#ifdef SALINITY
+#ifdef SAVE_PRESSURE
+       call nc_save_all(u_1,v_1,w_1,s_1,p,itime,rtime)
+#else
+       call nc_save_all(u_1,v_1,w_1,s_1,itime,rtime)
+#endif
+#else
+#ifdef SAVE_PRESSURE
+       call nc_save_all(u_1,v_1,w_1,p,itime,rtime)
+#else
+       call nc_save_all(u_1,v_1,w_1,itime,rtime)
+#endif
+#endif
+#endif
 
+#else
+*      Classic unformatted/formatted per-variable save:
        call savefield(u_1,'u',itime,rtime)
        call savefield(v_1,'v',itime,rtime)
        call savefield(w_1,'w',itime,rtime)
-       call savefield(p,'p',itime,rtime) ! For diagnostics, to be removed
-
-!       call prinf_checkdiv(u_1,v_1,
-!     &     w_1,uv,yp,yv,mm,nn)
-!       call savefield(uv,'d',itime,rtime)
+#ifdef SAVE_PRESSURE
+       call savefield(p,'p',itime,rtime)
+#endif
 
 #ifdef TEMPERATURE
        call savefield(t_1,'t',itime,rtime)
-       
 #endif
 #ifdef SALINITY
        call savefield(s_1,'s',itime,rtime)
 #endif
+#endif /* NETCDF_OUTPUT */
 
       end if       
 

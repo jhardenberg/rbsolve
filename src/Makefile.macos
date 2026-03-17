@@ -10,13 +10,12 @@ OMPI_F77 =      gfortran
 
 F77COMP	=	gfortran
 LINKER =	gfortran
-CFLAGS =       -O3 -ffixed-line-length-none -mcmodel=small -std=legacy
+CFLAGS =       -O3 -ffixed-line-length-none 
 #LDFLAGS        =   -static -lrfftw -lfftw   -lm
 #LDFLAGS        =  -L/usr/local/Cellar/fftw/3.3.8_1/lib/  -lfftw3 -lm
-LDFLAGS        =  -L/opt/homebrew/lib  -lfftw3 -lm
+LDFLAGS        =  -L/opt/homebrew/lib  -lfftw3 
 
 # NetCDF-Fortran (netcdf4, compression support)
-# Adjust these paths if your installation differs
 NC_F_PREFIX   = /opt/homebrew/Cellar/netcdf-fortran/4.6.2
 NC_C_PREFIX   = /opt/homebrew/Cellar/netcdf/4.9.3_2
 NC_INC        = $(NC_F_PREFIX)/include
@@ -99,7 +98,7 @@ depend:
 	$(DEPEND) *.F
 
 mpi: $(NAVIER_OBJ)
-	$(LINKER)  $(CFLAGS) -o rb $(NAVIER_OBJ)  $(LDFLAGS) $(NCLDFLAGS) 
+	$(LINKER)  $(CFLAGS) -o rb $(NAVIER_OBJ)  $(LDFLAGS) $(NCLDFLAGS)
 
 redom: $(NAVIER_OBJ)
 	$(LINKER)  $(CFLAGS) -o rb_redom $(NAVIER_REDOM_OBJ)  $(LDFLAGS) 
@@ -154,10 +153,6 @@ extr: $(FLUX_OBJ)
 FLUXV_OBJ    =       fluxv.o fourier1.o fourier1_tmpt.o tools.o salva.o
 fluxv: $(FLUXV_OBJ)
 	$(COMP)  $(CFLAGS) -D"NOMPI"  -o fluxv $(FLUXV_OBJ) $(LDFLAGS)
-
-COHERENCE_OBJ    =      coherence.o tools.o salva.o
-coherence: $(COHERENCE_OBJ)
-	$(COMP)  $(CFLAGS) -D"NOMPI"  -o coherence $(COHERENCE_OBJ) $(LDFLAGS)
 
 SPECTRUMH_OBJ    =       spectrumh.o tools.o salva.o
 spectrumh: $(SPECTRUMH_OBJ)
@@ -326,7 +321,6 @@ sectionz.o: config.h param.h
 slice.o: config.h param.h
 spectrumh.o: config.h param.h
 spectrumx.o: config.h param.h
-coherence.o: config.h param.h
 spectrumt.o: config.h param.h
 tn_poiss.o: config.h param.h
 tn_prinf_helmp.o: config.h param.h

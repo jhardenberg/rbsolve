@@ -18,15 +18,8 @@ c	perturbed with white noise on all wavenumbers
 
       character cc*1,str*30
 
-      real*8 ptan,qtan,ran2
-      real*8 DD,Lx,Lz,Re,invRe,dt,dx,dz
-      real*8 kxmin,kzmin,Ra,Kscalar,Pr
-
-      integer*4 nsave,ttot
-      real*8 alfa(3),beta(3),gamma(3),zeta(3)
-
-      common/ALLPARA/ptan,qtan,DD,Re,Lx,Lz,invRe,dt,dx,dz,
-     +   kxmin,kzmin,nsave,ttot,alfa,beta,gamma,zeta,Ra,Kscalar,Pr
+#include "allpara.h"
+      real*8 ran2
 
       real*8 A(nwax+1,2*nwaz+1)
       real*8 kxm(nwax+1),kzm(2*nwaz+1)
@@ -58,6 +51,7 @@ c	perturbed with white noise on all wavenumbers
 
       rr=ran2(idum)
 
+      call initfour(0)
       call slice()
       call read_para(0)
       call Crea_wave(kxm,kzm,K2,mm,nn,kxmin,kzmin)
@@ -71,9 +65,11 @@ c	perturbed with white noise on all wavenumbers
         enddo
       enddo
 
+#ifndef NETCDF_OUTPUT
       call savefield(t,'u',0,0.d0)
       call savefield(t,'v',0,0.d0)
       call savefield(t,'w',0,0.d0)
+#endif
 
 c     Crea lo spettro orrizontale
       do i=1,nwax+1
@@ -109,6 +105,18 @@ c     Crea lo spettro verticale (una gaussiana)
           t(1,1,j)=(yv(j)/DD+DD/2)*
      & (TEMPERATURE_TOP-TEMPERATURE_BOTTOM)+TEMPERATURE_BOTTOM      
       enddo
+#ifndef NETCDF_OUTPUT
       call savefield(t,'t',0,0.0d0)
-  
+#else
+*     In NetCDF mode: always start a clean file (delete any existing one)
+      open(99, file='rb_0000000.nc', status='old', iostat=i)
+      if(i.eq.0) close(99, status='delete')
+*     Write all fields together as step 0
+#ifdef TEMPERATURE
+      call nc_save_all(t,t,t,t,0,0.0d0)
+#else
+      call nc_save_all(t,t,t,0,0.0d0)
+#endif
+#endif
+
       end

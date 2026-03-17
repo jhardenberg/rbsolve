@@ -290,6 +290,7 @@ c Read in the parameters
       dt=1e-6
       ttot=50000
       nsave=500
+      nsnc=20000
       Ra=1e7
       Pr=0.71d0
       Kscalar=1.d0
@@ -332,6 +333,7 @@ c Read in the parameters
           write(*,*) 'dt=',dt
           write(*,*) 'ttot=',ttot
           write(*,*) 'nsave=',nsave
+          write(*,*) 'nsnc=',nsnc
           write(*,*) 'Reynolds =', Re
           write(*,*) 'Rayleigh =',Ra
           write(*,*) 'Prandtl  =',Pr

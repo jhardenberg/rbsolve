@@ -42,6 +42,8 @@ The file `config.h` contains options which define the physical structure of the 
 * `SCALAR_BOTTOM`, `SCALAR_TOP`:  Dirichlet haline BCs for top and bottom.
 * `PATTERNT_BOTTOM`, `PATTERNT_TOP`: Non-homogeneous Dirichlet BC. Requires files `temperature_bottom.dat` and/or `temperature_top.dat`. 
 * `PRESSURE_GRADIENT`: defines a mean pressure gradient (useful for NS experiments)
+* `NETCDF_OUTPUT`: enables NetCDF4 output (see [Output Formats](#output-formats) below).
+* `SAVE_PRESSURE`: also save the pressure field (works in both classic and NetCDF modes; off by default).
 
 At the bottom of config.h notice the following definitions (for the Rayleigh-Benard problem):
 
@@ -94,7 +96,8 @@ Set up  the file param_namelist with all the physical parameters for the experim
     &NUMERIC
       dt=1e-6     ! Timestep
       ttot=50000  ! Total number of steps
-      nsave=250   ! How often to save
+      nsave=250   ! How often to save (in steps)
+      nsnc=20000  ! Switch to a new NetCDF file every nsnc steps (NetCDF mode only)
     &END
 
     &PHYS
@@ -112,29 +115,62 @@ Not all parameters are used for all configurations. For example `lapse`and `Re` 
 
 ## Compiling ##
 
-Edit the `Makefile` to set up you compiler and its options. Some examples are included. 
+Edit the `Makefile` to set up your compiler and its options. Some examples are included.
+On **macOS with Apple Silicon (arm64)** use `Makefile.macos` instead:
 
-To compile the tools you need to specify in the Makefile that you are compiling without MPI leaving the line "NOMPI=1" uncommented.
+    make -f Makefile.macos clean
+    make -f Makefile.macos
+
+The `Makefile.macos` uses Homebrew paths (`/opt/homebrew`) for both fftw3 and the NetCDF libraries.
+
+To compile the tools you need to specify in the Makefile that you are compiling without MPI leaving the line `NOMPI=1` uncommented.
 To compile the main code with MPI you need to comment this line first.
 
-To make sure that everything is compiled correctly better do a "make clean" first.
-To compile the main code use the command "make".
+To make sure that everything is compiled correctly better do a `make clean` first.
+To compile the main code use the command `make`.
 
 `config.h` also contains a line
-      #define NOMPI 
+      #define NOMPI
 Leave this line commented to compile a parallel (MPI) version of the code, but uncomment it for compiling the tools which are all serial.
+
+## Output Formats ##
+
+### Classic Fortran unformatted (default) ###
+
+By default, each variable and each timestep is saved as a separate binary file named `X0000NNN.unf` (where `X` is the variable name and `NNN` is the timestep). The file `nrec.d` always records the latest saved timestep for restart.
+
+### NetCDF4 (optional) ###
+
+Enable NetCDF4 output by uncommenting `#define NETCDF_OUTPUT` in `config.h`. This requires the **NetCDF-Fortran** library to be installed.
+
+In this mode all variables are saved together in a single NetCDF4 file per rotation window, with HDF5/deflate compression (level 4). Files are named:
+
+    rb_0000000.nc    steps 0–19999
+    rb_0020000.nc    steps 20000–39999  (etc.)
+
+The rotation window size is controlled by `nsnc` in `param_namelist` (default 20000 steps). Within each file, one record is appended every `nsave` steps. This design limits data loss to at most one rotation window if a run is interrupted.
+
+The NetCDF coordinate dimensions are `(kx, kz, yi, time)`: complex fields are stored as separate `_re` and `_im` float variables.
+
+To optionally also save the pressure field in NetCDF (or classic) mode, uncomment `#define SAVE_PRESSURE` in `config.h`.
+
+**Installing NetCDF-Fortran on macOS:**
+
+    brew install netcdf netcdf-fortran
+
+The Makefile paths assume the default Homebrew Cellar locations. Adjust `NC_F_PREFIX` and `NC_C_PREFIX` in the Makefile if your installation differs.
 
 ## Running ##
 
 It's highly recommended to create a separate 'run' directory and to copy there the following files:
 
-* `param_namelist` (The main  parameter file)
-* `rb`  (our executable)
+* `param_namelist` (the main parameter file)
+* `rb`  (the executable)
+* `inicond` (if creating fresh initial conditions)
 
-You can create initial conditions with the tool `inicond` which will create a randomly perturbed (on T) linear conductive solution. 
-This will create initial files for t,u,v,w and a nrec.d file (containing the number 0).
-The file `nrec.d` contains always the timestep of the latest save. When the code starts it checks for this file and restarts from the timestep it indicates.
-Launch the code with
+You can create initial conditions with `inicond`, which generates a randomly perturbed linear conductive temperature profile. It writes initial fields for u, v, w and t (in classic mode as `.unf` files, in NetCDF mode as `rb_0000000.nc`) and creates `nrec.d` containing timestep 0.
+
+The file `nrec.d` always records the latest saved timestep. When the code starts it checks for this file and restarts from the timestep it indicates. Launch the code with
 
     mpirun -n 4 ./rb
 
