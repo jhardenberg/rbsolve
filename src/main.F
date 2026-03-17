@@ -441,7 +441,8 @@ c	Diagnostics
 #endif
 
 c Parameters were already read earlier
-      ttot=ttot+itime
+c ttot is now interpreted as an absolute time limit so we don't add itime
+      ! ttot=ttot+itime
 c Computation of wave vector arrays 
 
       call Crea_wave(kxm,kzm,K2,mm,nn,kxmin,kzmin)
