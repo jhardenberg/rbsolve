@@ -17,7 +17,7 @@ jobs:
       - name: Set up Fortran compiler and Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y gfortran libnetcdf-dev libnetcdff-dev libfftw3-dev make
+          sudo apt-get install -y gfortran libnetcdf-dev libnetcdff-dev libfftw3-dev make openmpi-bin libopenmpi-dev
 
       - name: Run Integration Test
         run: |
