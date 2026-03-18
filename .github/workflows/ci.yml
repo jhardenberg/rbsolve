@@ -1,0 +1,25 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Fortran compiler and Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gfortran libnetcdf-dev libnetcdff-dev libfftw3-dev make
+
+      - name: Run Integration Test
+        run: |
+          chmod +x tests/run_ci.sh
+          ./tests/run_ci.sh
