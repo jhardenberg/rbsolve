@@ -48,3 +48,36 @@ To run a classical Rayleigh-Bénard setup with standard NetCDF output:
     #undef PRINF
 
 After editing, run ``make clean`` and ``make`` to apply.
+
+MPI Compilation
+---------------
+
+To compile the code for distributed memory execution across multiple cores using MPI:
+
+1. **Edit the Makefile**:
+   Open ``src/Makefile`` (or ``src/Makefile.macos``) and comment out the ``NOMPI`` macro at the top of the file:
+   
+   .. code-block:: makefile
+
+       # Comment this line for MPI
+       # NOMPI = 1
+
+2. **Edit the Grid Parameters**:
+   The MPI domain decomposition is hardcoded at compile time. Open ``src/param.h`` and locate the ``#ifndef NOMPI`` block at the bottom.
+   Change the ``NPROC`` parameter to exactly match the number of cores you intend to run on (e.g., ``NPROC=2``). Note that the vertical grid resolution ``Ny`` dictates the ``Nylmem`` slice thickness requirement.
+
+3. **Recompile & Run**:
+   Clean the build directory and recompile. The Makefile will automatically switch to using ``mpif77``/``mpif90``.
+   
+   .. code-block:: bash
+
+       make clean
+       make inicond
+       make
+
+   You can then launch the binaries using your system's MPI launcher:
+
+   .. code-block:: bash
+
+       mpirun -np 2 ./inicond
+       mpirun -np 2 ./rb
