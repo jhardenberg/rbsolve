@@ -23,11 +23,6 @@ sed -i.bak 's/nsave=.*/nsave=50/g' param_namelist
 echo "Enabling MPI in Makefile"
 sed -i.bak 's/NOMPI = 1/#NOMPI = 1/g' Makefile
 
-echo "Configuring Ubuntu Paths for NetCDF and FFTW in Makefile"
-sed -i.bak 's|NC_F_PREFIX   = .*|NC_F_PREFIX   = /usr|g' Makefile
-sed -i.bak 's|NC_C_PREFIX   = .*|NC_C_PREFIX   = /usr|g' Makefile
-sed -i.bak 's|LDFLAGS        = .*|LDFLAGS        = -lfftw3 -lm|g' Makefile
-
 echo "Compiling inicond and rb"
 make clean
 make inicond
