@@ -1,7 +1,7 @@
 # Makefile for RB/Navier Stokes code
 
 #Comment this line for MPI
-NOMPI = 1
+##NOMPI = 1
 
 MPIF77COMP = mpif77
 OMPI_F77 =      gfortran
@@ -13,17 +13,18 @@ LINKER =	gfortran
 CFLAGS =       -O3 -ffixed-line-length-none -mcmodel=small -std=legacy
 #LDFLAGS        =   -static -lrfftw -lfftw   -lm
 #LDFLAGS        =  -L/usr/local/Cellar/fftw/3.3.8_1/lib/  -lfftw3 -lm
-LDFLAGS        =  -L/opt/homebrew/lib  -lfftw3 -lm
+#LDFLAGS        =  -L/opt/homebrew/lib  -lfftw3 -lm
+LDFLAGS        =  -lfftw3 -lm
 
 # NetCDF-Fortran (netcdf4, compression support)
 # Adjust these paths if your installation differs
-NC_F_PREFIX   = /opt/homebrew/Cellar/netcdf-fortran/4.6.2
-NC_C_PREFIX   = /opt/homebrew/Cellar/netcdf/4.9.3_2
-NC_INC        = $(NC_F_PREFIX)/include
-NC_F_LIB      = $(NC_F_PREFIX)/lib
-NC_C_LIB      = $(NC_C_PREFIX)/lib
-NCFLAGS       = -I$(NC_INC)
-NCLDFLAGS     = -L$(NC_F_LIB) -lnetcdff -L$(NC_C_LIB) -lnetcdf
+NC_F_PREFIX   = /usr
+NC_C_PREFIX   = /usr
+#NC_INC        = $(NC_F_PREFIX)/include
+#NC_F_LIB      = $(NC_F_PREFIX)/lib
+#NC_C_LIB      = $(NC_C_PREFIX)/lib
+NCFLAGS       = -I/usr/include
+NCLDFLAGS     = -lnetcdff -lnetcdf
 
 
 # Intel ?86/g77 options:
