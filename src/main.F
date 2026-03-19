@@ -411,12 +411,14 @@ c     reads the old (antonio et al) format, works only on single cpu ....
 
 #ifdef TEMPERATURE
 #ifdef PATTERNT_TOP
+      if(iam.eq.1) print *,"Reading top temperature pattern"
       open(unit=10,file='temperature_top.dat')
       read(10,*) ((ttopo(i,k),i=1,Nx),k=1,Nz) 
       close(10)
       call Fourier2_single2d(ttopo,ttop)
 #endif
 #ifdef PATTERNT_BOTTOM
+      if(iam.eq.1) print *,"Reading bottom temperature pattern"
       open(unit=10,file='temperature_bottom.dat')
       read(10,*) ((tboto(i,k),i=1,Nx),k=1,Nz) 
       close(10)
@@ -425,6 +427,7 @@ c     reads the old (antonio et al) format, works only on single cpu ....
 #endif
 
 #ifdef ROTATION_PATTERN
+      if(iam.eq.1) print *,"Reading rotation pattern"
       open(unit=10,file='rotation_pattern.dat')
       read(10,*) ((om_z_pato(i,k),i=1,Nx),k=1,Nz) 
       close(10)
