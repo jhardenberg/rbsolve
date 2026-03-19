@@ -67,6 +67,9 @@
 !-#define PATTERNT_BOTTOM
 !-#define PATTERNT_TOP
 
+!* Non-homogeneous Rotation
+!-#define ROTATION_PATTERN
+
 !**************************
 !* Technical code options *
 !*************************

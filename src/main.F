@@ -236,6 +236,11 @@ cmpi      call MPI_FINALIZE(ierr)
 
 #endif
 
+#ifdef ROTATION_PATTERN
+      complex*16 om_z_pat(nwax+1,2*nwaz+1)
+      real*8 om_z_pato(Nx,Nz)
+#endif
+
       complex*16 p(nwax+1,2*nwaz+1,0:Nylmem+1)
     
 *     These arrays contain the principal diagonals of
@@ -417,6 +422,13 @@ c     reads the old (antonio et al) format, works only on single cpu ....
       close(10)
       call Fourier2_single2d(tboto,tbot)
 #endif
+#endif
+
+#ifdef ROTATION_PATTERN
+      open(unit=10,file='rotation_pattern.dat')
+      read(10,*) ((om_z_pato(i,k),i=1,Nx),k=1,Nz) 
+      close(10)
+      call Fourier2_single2d(om_z_pato,om_z_pat)
 #endif
 
 c Controllo le condizioni iniziali di T
@@ -644,7 +656,11 @@ c VDIFF is defined as invRe and Pr ifdef TEMPERATURE
        call diffus (w_1,VDIFF,qv,rv,sv,K2,Lw_1)
 
 c       call addrotw (u_1,v_1,Omega,Lu_1,Lv_1)
+#ifdef ROTATION_PATTERN
+       call addrotpat (u_1,v_1,w_1,Omegay,Omegaz,Lu_1,Lv_1,Lw_1,om_z_pat)
+#else
        call addrot (u_1,v_1,w_1,Omegay,Omegaz,Lu_1,Lv_1,Lw_1)
+#endif
 c       Omega = Omega - dt*50000
 
 ***     Compute new temporary star velocities  

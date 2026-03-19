@@ -66,3 +66,26 @@ c Calcolo il termine diffusivo
      
        return
        end 
+
+      subroutine addrotpat (u_n,v_n,w_n,om_y,om_z,Lu_n,Lv_n,Lw_n,om_z_pat)
+ 
+#include "param.h"
+ 
+       complex*16 u_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       complex*16 v_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       complex*16 w_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       complex*16 Lu_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       complex*16 Lv_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       complex*16 Lw_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       complex*16 om_z_pat(nwax+1,2*nwaz+1)
+       real*8 om_y,om_z
+       integer jj
+ 
+       do j=Nylmin,Nylmax
+            Lu_n(:,:,j)=Lu_n(:,:,j)+om_y*w_n(:,:,j)-om_z*om_z_pat(:,:)*v_n(:,:,j)
+            Lv_n(:,:,j)=Lv_n(:,:,j)+om_z*om_z_pat(:,:)*u_n(:,:,j)
+            Lw_n(:,:,j)=Lw_n(:,:,j)-om_y*u_n(:,:,j)
+       enddo 
+     
+       return
+       end 
