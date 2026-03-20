@@ -236,9 +236,13 @@ cmpi      call MPI_FINALIZE(ierr)
 
 #endif
 
-#ifdef ROTATION_PATTERN
+#ifdef ROTATION_PATTERN_Z
       complex*16 om_z_pat(nwax+1,2*nwaz+1)
       real*8 om_z_pato(Nx,Nz)
+#endif
+#ifdef ROTATION_PATTERN_Y
+      complex*16 om_y_pat(nwax+1,2*nwaz+1)
+      real*8 om_y_pato(Nx,Nz)
 #endif
 
       complex*16 p(nwax+1,2*nwaz+1,0:Nylmem+1)
@@ -426,12 +430,20 @@ c     reads the old (antonio et al) format, works only on single cpu ....
 #endif
 #endif
 
-#ifdef ROTATION_PATTERN
-      if(iam.eq.1) print *,"Reading rotation pattern"
-      open(unit=10,file='rotation_pattern.dat')
+#ifdef ROTATION_PATTERN_Z
+      if(iam.eq.1) print *,"Reading rotation pattern Z"
+      open(unit=10,file='rotation_pattern_z.dat')
       read(10,*) ((om_z_pato(i,k),i=1,Nx),k=1,Nz) 
       close(10)
       call Fourier2_single2d(om_z_pato,om_z_pat)
+#endif
+
+#ifdef ROTATION_PATTERN_Y
+      if(iam.eq.1) print *,"Reading rotation pattern Y"
+      open(unit=10,file='rotation_pattern_y.dat')
+      read(10,*) ((om_y_pato(i,k),i=1,Nx),k=1,Nz) 
+      close(10)
+      call Fourier2_single2d(om_y_pato,om_y_pat)
 #endif
 
 c Controllo le condizioni iniziali di T
@@ -659,8 +671,15 @@ c VDIFF is defined as invRe and Pr ifdef TEMPERATURE
        call diffus (w_1,VDIFF,qv,rv,sv,K2,Lw_1)
 
 c       call addrotw (u_1,v_1,Omega,Lu_1,Lv_1)
-#ifdef ROTATION_PATTERN
-       call addrotpat (u_1,v_1,w_1,Omegay,Omegaz,Lu_1,Lv_1,Lw_1,om_z_pat)
+#if defined(ROTATION_PATTERN_Z) || defined(ROTATION_PATTERN_Y)
+       call addrotpat (u_1,v_1,w_1,Omegay,Omegaz,Lu_1,Lv_1,Lw_1
+#ifdef ROTATION_PATTERN_Y
+     + ,om_y_pat
+#endif
+#ifdef ROTATION_PATTERN_Z
+     + ,om_z_pat
+#endif
+     + )
 #else
        call addrot (u_1,v_1,w_1,Omegay,Omegaz,Lu_1,Lv_1,Lw_1)
 #endif
