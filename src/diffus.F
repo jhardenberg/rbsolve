@@ -66,3 +66,63 @@ c Calcolo il termine diffusivo
      
        return
        end 
+
+#if defined(ROTATION_PATTERN_Y) || defined(ROTATION_PATTERN_Z)
+      subroutine addrotpat (u_n,v_n,w_n,om_y,om_z,Lu_n,Lv_n,Lw_n
+#ifdef ROTATION_PATTERN_Y
+     + ,om_y_pat
+#endif
+#ifdef ROTATION_PATTERN_Z
+     + ,om_z_pat
+#endif
+     + )
+ 
+#include "param.h"
+ 
+       complex*16 u_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       complex*16 v_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       complex*16 w_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       complex*16 Lu_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       complex*16 Lv_n(nwax+1,2*nwaz+1,0:Nyl+1)
+       complex*16 Lw_n(nwax+1,2*nwaz+1,0:Nyl+1)
+#ifdef ROTATION_PATTERN_Y
+       complex*16 om_y_pat(nwax+1,2*nwaz+1)
+#endif
+#ifdef ROTATION_PATTERN_Z
+       complex*16 om_z_pat(nwax+1,2*nwaz+1)
+#endif
+       real*8 om_y,om_z
+       integer jj
+ 
+       do j=Nylmin,Nylmax
+            Lu_n(:,:,j)=Lu_n(:,:,j)
+#ifdef ROTATION_PATTERN_Y
+     +                  +om_y*om_y_pat(:,:)*w_n(:,:,j)
+#else
+     +                  +om_y*w_n(:,:,j)
+#endif
+#ifdef ROTATION_PATTERN_Z
+     +                  -om_z*om_z_pat(:,:)*v_n(:,:,j)
+#else
+     +                  -om_z*v_n(:,:,j)
+#endif
+
+            Lv_n(:,:,j)=Lv_n(:,:,j)
+#ifdef ROTATION_PATTERN_Z
+     +                  +om_z*om_z_pat(:,:)*u_n(:,:,j)
+#else
+     +                  +om_z*u_n(:,:,j)
+#endif
+
+            Lw_n(:,:,j)=Lw_n(:,:,j)
+#ifdef ROTATION_PATTERN_Y
+     +                  -om_y*om_y_pat(:,:)*u_n(:,:,j)
+#else
+     +                  -om_y*u_n(:,:,j)
+#endif
+
+       enddo 
+     
+       return
+       end 
+#endif
